@@ -1,0 +1,2 @@
+findUsername = SELECT * FROM app_user WHERE username = ?;
+findEmail = SELECT * FROM app_user WHERE email = ?; 

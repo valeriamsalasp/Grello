@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Grello</title>
+    <style>
+        body{
+            background-color: #94c6df;
+
+            background-image: url("../img/fondo3.png");
+            background-blend-mode: normal;
+            background-repeat: no-repeat;
+            background-position:  45% -30% ;
+            background-size:  90% 400%;
+        }
+
+        #usuario {
+            width: 25%;
+            position: absolute;
+            margin-top: 17.2%;
+            margin-left: 35%;
+            
+        }
+
+        #contrasena {
+            width: 25%;
+            position: absolute;
+            margin-top: 18.2%;
+            margin-left: 35%;
+            
+        }
+
+        #iniciar{
+            position: absolute;
+            margin-top: 19.2%;
+            margin-left: 43%;
+        }
+    
+        h1{
+           font-size: 120%;
+           position: absolute; 
+           margin-top: 18.2%; 
+           margin-left: 28%;
+
+        } 
+        h2{
+            font-size: 120%;
+            position: absolute; 
+            margin-top: 19.5%; 
+            margin-left: 28%;
+        }
+        #cuenta{
+            position: absolute;
+            margin-top: 20.2%;
+            margin-left: 43.2%;
+        }
+
+        #img{
+            width:30%;
+            height: 15%;
+            position: absolute;
+            margin-left: 67%;
+            margin-top: -9%;
+        }
+   
+    </style>
+</head>
+<body>
+    
+    <h1>Usuario:</h1><br><input type="text" id="usuario"><br>
+    <h2>Contraseña:</h2><br><input type="password" id="contrasena" ><br><br>
+    <input type="submit" id="iniciar" value="Iniciar Sesion" ><br><br>
+    <a href="../registro/index.html" id="cuenta">Crear cuenta</a>
+    <a href="../index.html">
+    <img src="../img/logo.png" id="img">
+    </a>
+    
+<script>
+    function avanzar(){
+            window.hystory.go(1);
+    }
+</script>
+</body>
+</html>
