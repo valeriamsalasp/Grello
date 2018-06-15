@@ -101,14 +101,50 @@
 </head>
 <body>
    
-    <h1>Nombre</h1><input type="text" id="nombre">
+    <h1>Nombre</h1><input type="text" id="nombre" >
     <h2>Apellido</h2><input type="text" id="apellido"><br>
     <h3>Usuario</h3><input type="text" id="usuario">
-    <h4>Contraseña</h4><input type="password" id="contrasena"><br><br>
+    <h4>Contrasena</h4><input type="password" id="contrasena"><br><br>
     <h5>Correro Electronico</h5><br><input type="text" id="correo"><br>
-    <input type="submit" id="crear" value="Crear Cuenta">
+    <input type="submit" id="crear" value="Crear Cuenta" onclick="enviar()">
     <a href="../login/index.html" id="cuenta">Iniciar Sesion</a>
     <a href="../index.html"><img src="../img/logo.png" id="img"></a>
+    
+    <script type="text/javascript">
+    	//var xhr = new XMLHttpRequest();
+    	
+    	function enviar() {
+    	    var json ={
+    	    		nombre: document.getElementById("nombre").value,
+    	    		apellido: document.getElementById("apellido").value,
+    	    		usuario: document.getElementById("usuario").value,
+    	    		contrasena: document.getElementById("contrasena").value,
+    	    		correo: document.getElementById("correo").value
+    	    }
+    	    let configs = {
+    	    		method: 'post',
+    	    		body: JSON.stringify(json)
+    	    }
+    	    fetch('/Grello/Registro', configs)
+    	    	.then(res => res.json())
+    	    	.then(data => console.log(data));
+    	    	
+    		/*
+	    xhr.onload = () => {
+	    	if (xhr.status === 200 && xhr.readyState === 4 ) {
+	    		console.log(xhr.responseText);
+	    	} else {
+	    		console.log('Error');
+	    	}
+	    }
+	    */
+	   
+
+	    /*xhr.open("POST", "/Registro", true);*/
+	    
+	    /*xhr.send(form);*/
+    	}
+    </script>
     
 </body>
 </html>

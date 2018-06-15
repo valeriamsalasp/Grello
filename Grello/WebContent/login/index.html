@@ -67,12 +67,29 @@
 <body>
     
     <h1>Usuario:</h1><br><input type="text" id="usuario"><br>
-    <h2>Contraseña:</h2><br><input type="password" id="contrasena" ><br><br>
-    <input type="submit" id="iniciar" value="Iniciar Sesion" ><br><br>
+    <h2>Contrasena:</h2><br><input type="password" id="contrasena" ><br><br>
+    <input type="submit" id="iniciar" value="Iniciar Sesion" onclick="iniciar()" ><br><br>
     <a href="../registro/index.html" id="cuenta">Crear cuenta</a>
-    <a href="../index.html">
-    <img src="../img/logo.png" id="img">
-    </a>
+    <a href="../index.html"><img src="../img/logo.png" id="img"></a>
+    
+    <script type="text/javascript">
+    	var xhr = new XMLHttpRequest();
+    	xhr.onload = () => {
+	    	if (xhr.status === 200 && xhr.readyState === 4 ) {
+	    		console.log(xhr.responseText);
+	    	} else {
+	    		console.log('Error');
+	    	}
+	    }
+    	function iniciar(){
+		   xhr.open("POST", "Grello/Login", true);
+		   var form = new FormData();
+		   form.append ("user_username", document.getElementById("usuario").value);
+		   form.append ("user_password", document.getElementById("contrasena").value);
+		   xhr.send(form);
+    	}
+    </script>
+    
     
 <script>
     function avanzar(){
