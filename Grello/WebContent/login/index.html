@@ -73,7 +73,20 @@
     <a href="../index.html"><img src="../img/logo.png" id="img"></a>
     
     <script type="text/javascript">
-    	var xhr = new XMLHttpRequest();
+    	function iniciar(){
+		    var json ={
+		    		user_username: document.getElementById("usuario").value,
+		    		user_password: document.getElementById("contrasena").value,
+		    }
+		    let configs = {
+		    		method: 'post',
+		    		body: JSON.stringify(json)
+		    }
+		    fetch('/Grello/Login', configs)
+		    	.then(res => res.json())
+		    	.then(data => console.log(data));
+    	}
+    	/*var xhr = new XMLHttpRequest();
     	xhr.onload = () => {
 	    	if (xhr.status === 200 && xhr.readyState === 4 ) {
 	    		console.log(xhr.responseText);
@@ -87,7 +100,7 @@
 		   form.append ("user_username", document.getElementById("usuario").value);
 		   form.append ("user_password", document.getElementById("contrasena").value);
 		   xhr.send(form);
-    	}
+    	}*/
     </script>
     
     

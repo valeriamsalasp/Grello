@@ -26,7 +26,17 @@ public class BDConexion {
 			this.stmt.setObject(i + 1, value);
 			
 			return this.stmt.executeQuery();
+			
 	}
+	
+	public int executeStatement2(String query,Object...value) throws SQLException{
+		this.stmt = this.con.prepareStatement(query);
+		for(int i=1; i < value.length; i++ )
+		this.stmt.setObject(i + 1, value);
+		
+		return this.stmt.executeUpdate();
+		
+}
 	
 	protected void closeMainResource() throws SQLException {
 		if(this.stmt != null) 

@@ -55,7 +55,8 @@ public class Login extends HttpServlet {
 			try {
 				userData = db.ObtenerDatos(data);
 				if(userData.length() > 0) {
-					//storeValue()
+					sesion.setAttribute("usuario", userData);
+					response.sendRedirect("Grello/loggedin/index.html");
 				}else {
 					mensaje.put("status", 409).put("response", "Invalid username or password");
 					sesion.invalidate();
@@ -67,7 +68,7 @@ public class Login extends HttpServlet {
 				db.closeResources();
 			}
 		} 
-		out.println(mensaje.toString());
+		out.println(userData.toString());
 		
 	}
 
