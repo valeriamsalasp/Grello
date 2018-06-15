@@ -19,6 +19,7 @@ import conexion.Queries;
 /**
  * Servlet implementation class Login
  */
+
 @WebServlet("/Registro")
 public class Registro extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -46,7 +47,6 @@ public class Registro extends HttpServlet {
 		JSONObject mensaje = new JSONObject();
 		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 		Queries db = new Queries();
-
 		try {
 			
 			if(!db.VerificarUsuario(data.getString("user_username"))) {
