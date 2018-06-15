@@ -14,17 +14,23 @@ public class BDConexion {
 			  this.con = null;		
 		    Class.forName ("org.postgresql.Driver");
 		    this.con = DriverManager.getConnection (   
-		    "jdbc:postgresql://localhost:1099/Trello", "postgres", "10021999");   
+		    "jdbc:postgresql://localhost:1099/Grello", "postgres", "10021999");   
 		  } 
 		  catch (Exception e) {
 			e.printStackTrace ();
 		  }	
 	}
-	public ResultSet executeStatement(String query,String value) throws SQLException{
+	public ResultSet executeStatement(String query,Object...value) throws SQLException{
 			this.stmt = this.con.prepareStatement(query);
-			this.stmt.setObject(1, value);
+			for(int i=1; i < value.length; i++ )
+			this.stmt.setObject(i + 1, value);
 			
 			return this.stmt.executeQuery();
+	}
+	
+	protected void closeMainResource() throws SQLException {
+		if(this.stmt != null) 
+			this.stmt.close();
 	}
 }
 

@@ -19,7 +19,7 @@ import conexion.Queries;
 /**
  * Servlet implementation class Login
  */
-@WebServlet("/Register")
+@WebServlet("/Registro")
 public class Registro extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

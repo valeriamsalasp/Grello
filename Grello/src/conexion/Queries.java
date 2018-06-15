@@ -2,18 +2,64 @@ package conexion;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.*;
+
+
+
+import org.json.JSONObject;
 
 public class Queries extends BDConexion {
 	private ResultSet rs;
+	private ResultSetMetaData rsmd;
 	
-	public boolean checkusuario(String value) throws SQLException{
-		this.rs = executeStatement("SELECT * FROM users WHERE user_name = ?", value);
+	private JSONObject getData() throws SQLException {
+		JSONObject userData = new JSONObject();
+		if(this.rs.next()) {		
+			this.rsmd = rs.getMetaData();
+			for(int i = 1; i <= this.rsmd.getColumnCount(); i++) {
+				userData.put(rsmd.getColumnLabel(i), rs.getObject(i));
+			}
+		}
+		return userData;
+	}
+	
+	//Verificar el usuario
+	public boolean VerificarUsuario(String value) throws SQLException{
+		this.rs = executeStatement("BuscarUsuario", value);
 		return this.rs.next();
 	}
 	
-	public boolean checkemail(String value) throws SQLException{
-		this.rs = executeStatement("SELECT * FROM users WHERE user_email = ?", value);
+	//Verificar el email
+	public boolean VerificarCorreo(String value) throws SQLException{
+		this.rs = executeStatement("BuscarCorreo", value);
 		return this.rs.next();
 	}
+	
+	//Verifica si el usuario existe y retorna sus datos
+	public JSONObject ObtenerDatos (JSONObject user)throws SQLException{
+		this.rs = executeStatement("VerificarIngreso", user.get("user_username"), user.get("user_password"));
+		return this.getData();
+	}
+	
+	
+	//Registrar la cuenta
+	public boolean Registrar(JSONObject data) throws SQLException{
+		this.rs = executeStatement("IngresarUsuario", data.getString("user_name"), data.getString("user_last_name"),
+				data.getString("user_username"), data.getString("user_password"), data.getString("user_email"));
+		return (this.Registrar(data))?true:false;
+	}
+	
+	//Cerrar los recursos	public void closeResources() {
+	public void closeResources() {
+		try {
+			closeMainResource();
+			if(this.rs != null)
+				this.rs.close();
+		} catch (SQLException e) {
+			System.out.println("Problema al cerrar los recursos");
+			e.printStackTrace();
+		}
+	}
+	
 	
 }
