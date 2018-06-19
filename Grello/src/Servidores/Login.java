@@ -1,6 +1,5 @@
 package Servidores;
 
-import java.io.Console;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -14,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONArray;
+//import org.json.JSONArray;
 import org.json.JSONObject;
 
 import Grello.LeerProperties;
