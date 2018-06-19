@@ -1,8 +1,9 @@
-package userAction;
+package Servidores;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
@@ -10,24 +11,25 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 
 import org.json.JSONObject;
 
-import conexion.Queries;
+import Grello.LeerProperties;
+import Grello.Queries;
 
 /**
  * Servlet implementation class Login
  */
-@WebServlet("/Login")
-public class Login extends HttpServlet {
+
+@WebServlet("/Registro")
+public class Registro extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
     /**
-     * @see HttpServlet#HttpServlet()
+     * Default constructor. 
      */
-    public Login() {
-        super();
+    public Registro() {
         // TODO Auto-generated constructor stub
     }
 
@@ -36,40 +38,37 @@ public class Login extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		doPost(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		PrintWriter out = response.getWriter();
 		JSONObject mensaje = new JSONObject();
 		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 		Queries db = new Queries();
-		JSONObject userData = new JSONObject();
-		HttpSession sesion = request.getSession();
+		Properties dataSource = new LeerProperties().getFile("C:\\Users\\Gressia\\git\\Grello\\Grello\\WebContent\\query.properties");
 		
-		if(sesion.isNew()) {
-			try {
-				userData = db.ObtenerDatos(data);
-				if(userData.length() > 0) {
-					sesion.setAttribute("usuario", userData);
-					response.sendRedirect("Grello/loggedin/index.html");
+		try {
+			
+			if(!db.VerificarUsuario(data.getString("user_username"))) {
+				if(!db.VerificarCorreo(data.getString("user_email"))) {
+					db.Registrar(data);
+					mensaje.put("status", 200).put("response", "el usuario fue creado");
 				}else {
-					mensaje.put("status", 409).put("response", "Invalid username or password");
-					sesion.invalidate();
+					mensaje.put("status", 500).put("response", "este correo ya existe");
 				}
-			}catch( SQLException e) {
-				e.printStackTrace();
-				sesion.invalidate();
-			} finally {
-				db.closeResources();
+			}else {
+				mensaje.put("status", 500).put("response:","Este nombre de usuario ya existe");
 			}
-		} 
-		out.println(userData.toString());
+		}catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			db.closeResources();
+		}
+		out.println(mensaje.toString());
 		
 	}
-
 }

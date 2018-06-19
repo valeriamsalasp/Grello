@@ -1,4 +1,4 @@
-package Seguridad;
+package Grello;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -20,7 +20,4 @@ public class Encriptamiento {
 		}
 		return originalPass;
 	}
-
-
-
 }
