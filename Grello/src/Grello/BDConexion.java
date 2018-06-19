@@ -9,9 +9,9 @@ import java.sql.SQLException;
 public class BDConexion {
 	public PreparedStatement stmt;
 	public Connection con;
-	public BDConexion (){
+	public BDConexion(){
 		  try{
-			  this.con = null;		
+			this.con = null;		
 		    Class.forName ("org.postgresql.Driver");
 		    this.con = DriverManager.getConnection (   
 		    "jdbc:postgresql://localhost:1099/Grello", "postgres", "10021999");   

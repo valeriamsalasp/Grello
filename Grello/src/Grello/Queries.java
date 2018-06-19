@@ -4,8 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.*;
 
-import Encriptamiento;
-
 import org.json.JSONObject;
 
 public class Queries extends BDConexion {
@@ -38,7 +36,7 @@ public class Queries extends BDConexion {
 	//Verifica si el usuario existe y retorna sus datos
 	public JSONObject ObtenerDatos (JSONObject user)throws SQLException{
 		String encriptada = Encriptamiento.HashPassword(user.getString("user_password"));
-		this.rs = executeStatement("VerificarIngreso", user.get("user_username"), encriptada);
+		this.rs = executeStatement("SELECT user_id, type_des, user_username, user_email, user_name, user_last_name FROM user INNER JOIN type_user ON type_user.type_id = users.type_id WHERE user_username = ? AND user_password = ?", user.getString("user_username"), encriptada);
 		return this.getData();
 	}
 	

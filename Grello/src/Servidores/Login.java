@@ -36,19 +36,24 @@ public class Login extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		JSONObject mensaje = new JSONObject();
 		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
+		
 		Queries db = new Queries();
 		JSONObject userData = new JSONObject();
 		HttpSession sesion = request.getSession(true);
 		/*String username = request.getParameter("user_username");
 		String password = request.getParameter("user_password");*/
 		Properties dataSource = new LeerProperties().getFile("C:\\Users\\Gressia\\git\\Grello\\Grello\\WebContent\\query.properties");
-		
+
 		if(sesion.isNew()) {
 			try {
+				out.println("hola");
 				userData = db.ObtenerDatos(data);
+				System.out.println(userData);
 				//JSONObject users = db.ObtenerDatos(username, password);
 				if(userData.length() > 0) {
-					sesion.setAttribute("usuario", userData);
+					storeValue(sesion, userData);
+					mensaje.put("status", 200).put("userData", userData);
+					System.out.println("Todo realizado con exito");
 					response.sendRedirect("Grello/loggedin/index.html");
 				}else {
 					mensaje.put("status", 409).put("response", "Invalid username or password");
@@ -63,6 +68,15 @@ public class Login extends HttpServlet {
 		} 
 		out.println(userData.toString());
 		
+	}
+	
+	private void storeValue(HttpSession session, JSONObject value) {
+		if(value ==null) {
+			session.setAttribute("session", "");
+		}
+		else {
+			session.setAttribute("session", value);
+		}
 	}
 
 }
