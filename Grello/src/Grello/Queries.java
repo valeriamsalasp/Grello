@@ -23,13 +23,13 @@ public class Queries extends BDConexion {
 	
 	//Verificar el usuario
 	public boolean VerificarUsuario(String value) throws SQLException{
-		this.rs = executeStatement("BuscarUsuario", value);
+		this.rs = executeStatement(" SELECT * FROM users WHERE user_username = ?", value);
 		return this.rs.next();
 	}
 	
 	//Verificar el email
 	public boolean VerificarCorreo(String value) throws SQLException{
-		this.rs = executeStatement("BuscarCorreo", value);
+		this.rs = executeStatement("SELECT * FROM users WHERE user_email = ?", value);
 		return this.rs.next();
 	}
 	
@@ -44,7 +44,7 @@ public class Queries extends BDConexion {
 	//Registrar la cuenta
 	public boolean Registrar(JSONObject data) throws SQLException{
 		String encriptada = Encriptamiento.HashPassword(data.getString("user_password"));
-		int i = executeStatement2("IngresarUsuario", data.getString("user_name"), data.getString("user_last_name"),
+		int i = executeStatement2("INSERT INTO users(type_id,user_name, user_last_name, user_username, user_password, user_email) VALUES((SELECT type_id FROM type_user WHERE type_des = 'User'), ?, ?, ?, ?, ?);", data.getString("user_name"), data.getString("user_last_name"),
 				data.getString("user_username"), encriptada, data.getString("user_email"));
 		return (i == 1)?true:false;
 	}

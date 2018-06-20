@@ -56,10 +56,13 @@ public class Registro extends HttpServlet {
 		String email = request.getParameter("user_email");*/
 		Properties dataSource = new LeerProperties().getFile("C:\\Users\\Gressia\\git\\Grello\\Grello\\WebContent\\query.properties");
 		
+		System.out.println("primero");
 		try {
-			
+			System.out.println("comenzamos");
 			if(!db.VerificarUsuario(data.getString("user_username"))) {
+				System.out.println("Usuario correcto");
 				if(!db.VerificarCorreo(data.getString("user_email"))) {
+					System.out.println("email correcto");
 					boolean status = db.Registrar(data);
 					if (status) {
 						mensaje.put("status", 200).put("response", "el usuario fue creado");
