@@ -54,9 +54,10 @@ public class Registro extends HttpServlet {
 		String username = request.getParameter("user_username");
 		String password = request.getParameter("user_password");
 		String email = request.getParameter("user_email");*/
-		Properties dataSource = new LeerProperties().getFile("C:\\Users\\Gressia\\git\\Grello\\Grello\\WebContent\\query.properties");
+		//Properties dataSource = new LeerProperties().getFile("C:\\Users\\Gressia\\git\\Grello\\Grello\\WebContent\\query.properties");
 		
 		System.out.println("primero");
+		
 		try {
 			System.out.println("comenzamos");
 			if(!db.VerificarUsuario(data.getString("user_username"))) {

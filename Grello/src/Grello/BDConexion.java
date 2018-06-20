@@ -22,7 +22,7 @@ public class BDConexion {
 	}
 	public ResultSet executeStatement(String query,Object...value) throws SQLException{
 			this.stmt = this.con.prepareStatement(query);
-			for(int i=1; i < value.length; i++ )
+			for(int i=0; i < value.length; i++ )
 			this.stmt.setObject(i + 1, value);
 			
 			return this.stmt.executeQuery();
@@ -31,7 +31,7 @@ public class BDConexion {
 	
 	public int executeStatement2(String query,Object...value) throws SQLException{
 		this.stmt = this.con.prepareStatement(query);
-		for(int i=1; i < value.length; i++ )
+		for(int i=0; i < value.length; i++ )
 		this.stmt.setObject(i + 1, value);
 		
 		return this.stmt.executeUpdate();

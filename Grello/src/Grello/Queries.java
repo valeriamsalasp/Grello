@@ -46,6 +46,7 @@ public class Queries extends BDConexion {
 		String encriptada = Encriptamiento.HashPassword(data.getString("user_password"));
 		int i = executeStatement2("INSERT INTO users(type_id,user_name, user_last_name, user_username, user_password, user_email) VALUES((SELECT type_id FROM type_user WHERE type_des = 'User'), ?, ?, ?, ?, ?);", data.getString("user_name"), data.getString("user_last_name"),
 				data.getString("user_username"), encriptada, data.getString("user_email"));
+	
 		return (i == 1)?true:false;
 	}
 	
