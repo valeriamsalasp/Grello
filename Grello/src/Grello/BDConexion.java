@@ -9,6 +9,8 @@ import java.sql.SQLException;
 public class BDConexion {
 	public PreparedStatement stmt;
 	public Connection con;
+	public ResultSet rs;
+	
 	public BDConexion(){
 		  try{
 			this.con = null;		
@@ -21,18 +23,22 @@ public class BDConexion {
 		  }	
 	}
 	public ResultSet executeStatement(String query,Object...value) throws SQLException{
+		
 			this.stmt = this.con.prepareStatement(query);
 			for(int i=0; i < value.length; i++ )
-			this.stmt.setObject(i + 1, value);
+				this.stmt.setObject(i + 1, value[i]);
+			
+			//this.rs = this.stmt.executeQuery();
 			
 			return this.stmt.executeQuery();
+			
 			
 	}
 	
 	public int executeStatement2(String query,Object...value) throws SQLException{
 		this.stmt = this.con.prepareStatement(query);
 		for(int i=0; i < value.length; i++ )
-		this.stmt.setObject(i + 1, value);
+		this.stmt.setObject(i + 1, value[i]);
 		
 		return this.stmt.executeUpdate();
 		
