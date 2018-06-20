@@ -123,7 +123,12 @@
     	    }
     	    let configs = {
     	    		method: 'post',
-    	    		body: JSON.stringify(json)
+    	    		body: JSON.stringify(json),
+    	    		withCredentials: true,
+    	    		credentials: 'include',
+    	    		headers: {
+    	    			'Content-type': 'application/json'
+    	    		}
     	    }
     	    fetch('../Registro', configs)
     	    	.then(res => res.json())

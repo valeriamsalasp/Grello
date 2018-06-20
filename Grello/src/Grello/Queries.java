@@ -10,6 +10,10 @@ public class Queries extends BDConexion {
 	private ResultSet rs;
 	private ResultSetMetaData rsmd;
 	
+	public Queries() {
+		super();
+	}
+	
 	private JSONObject getData() throws SQLException {
 		JSONObject userData = new JSONObject();
 		if(this.rs.next()) {		

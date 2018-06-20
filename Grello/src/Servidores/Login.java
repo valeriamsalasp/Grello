@@ -3,7 +3,7 @@ package Servidores;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.Properties;
+//import java.util.Properties;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 //import org.json.JSONArray;
 import org.json.JSONObject;
 
-import Grello.LeerProperties;
+//import Grello.LeerProperties;
 import Grello.Queries;
 
 @WebServlet("/Login")
@@ -41,7 +41,7 @@ public class Login extends HttpServlet {
 		HttpSession sesion = request.getSession(true);
 		/*String username = request.getParameter("user_username");
 		String password = request.getParameter("user_password");*/
-		Properties dataSource = new LeerProperties().getFile("C:\\Users\\Gressia\\git\\Grello\\Grello\\WebContent\\query.properties");
+		//Properties dataSource = new LeerProperties().getFile("C:\\Users\\Gressia\\git\\Grello\\Grello\\WebContent\\query.properties");
 
 		if(sesion.isNew()) {
 			try {
