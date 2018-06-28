@@ -49,15 +49,7 @@ public class Registro extends HttpServlet {
 		JSONObject mensaje = new JSONObject();
 		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 		Queries db = new Queries();
-		/*String name = request.getParameter("user_name");
-		String lastname = request.getParameter("user_last_name");
-		String username = request.getParameter("user_username");
-		String password = request.getParameter("user_password");
-		String email = request.getParameter("user_email");*/
-		//Properties dataSource = new LeerProperties().getFile("C:\\Users\\Gressia\\git\\Grello\\Grello\\WebContent\\query.properties");
-		
-		System.out.println("primero");
-		
+		System.out.println(data.getString("user_username"));
 		try {
 			System.out.println("comenzamos");
 			if(!db.VerificarUsuario(data.getString("user_username"))) {

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.*;
 
 import org.json.JSONObject;
+import java.util.Properties;
 
 public class Queries extends BDConexion {
 	private ResultSet rs;
@@ -27,20 +28,23 @@ public class Queries extends BDConexion {
 	
 	//Verificar el usuario
 	public boolean VerificarUsuario(String value) throws SQLException{
-		this.rs = executeStatement(" SELECT * FROM users WHERE user_username = ?", value);
+		Properties leer= new LeerProperties().getFile("C:\\Users\\Gressia\\git\\Grello\\Grello\\WebContent\\query.properties");
+		this.rs = executeStatement(leer.getProperty("BuscarUsuario"), value);
 		return this.rs.next();
 	}
 	
 	//Verificar el email
 	public boolean VerificarCorreo(String value) throws SQLException{
-		this.rs = executeStatement("SELECT * FROM users WHERE user_email = ?", value);
+		Properties leer= new LeerProperties().getFile("C:\\Users\\Gressia\\git\\Grello\\Grello\\WebContent\\query.properties");
+		this.rs = executeStatement(leer.getProperty("BuscarCorreo"), value);
 		return this.rs.next();
 	}
 	
 	//Verifica si el usuario existe y retorna sus datos
 	public JSONObject ObtenerDatos (JSONObject user)throws SQLException{
 		String encriptada = Encriptamiento.HashPassword(user.getString("user_password"));
-		this.rs = executeStatement("SELECT user_id, type_des, user_username, user_email, user_name, user_last_name FROM user INNER JOIN type_user ON type_user.type_id = users.type_id WHERE user_username = ? AND user_password = ?", user.getString("user_username"), encriptada);
+		Properties leer= new LeerProperties().getFile("C:\\Users\\Gressia\\git\\Grello\\Grello\\WebContent\\query.properties");
+		this.rs = executeStatement(leer.getProperty("VerificarIngreso"), user.getString("user_username"), encriptada);
 		return this.getData();
 	}
 	
@@ -48,7 +52,9 @@ public class Queries extends BDConexion {
 	//Registrar la cuenta
 	public boolean Registrar(JSONObject data) throws SQLException{
 		String encriptada = Encriptamiento.HashPassword(data.getString("user_password"));
-		int i = executeStatement2("INSERT INTO users(type_id,user_name, user_last_name, user_username, user_password, user_email) VALUES((SELECT type_id FROM type_user WHERE type_des = 'User'), ?, ?, ?, ?, ?);", data.getString("user_name"), data.getString("user_last_name"),
+		Properties leer= new LeerProperties().getFile("C:\\Users\\Gressia\\git\\Grello\\Grello\\WebContent\\query.properties");
+		System.out.println(leer);
+		int i = executeUpdate(leer.getProperty("IngresarUsuario"), data.getString("user_name"), data.getString("user_last_name"),
 				data.getString("user_username"), encriptada, data.getString("user_email"));
 	
 		return (i == 1)?true:false;

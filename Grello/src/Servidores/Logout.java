@@ -32,7 +32,19 @@ public class Logout extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		PrintWriter out = response.getWriter();
+		HttpSession session = request.getSession();
+		JSONObject json = new JSONObject();
+		if(session.isNew()) {
+			json.put("status", 304).put("res", "session not started");
+			session.invalidate();
+		}else {
+			json.put("status", 200).put("res", "session finished");
+			session.invalidate();
+			System.out.println("Sesion cerrada");
+		}
+		
+		out.print(json.toString());
 	}
 
 	/**
@@ -40,16 +52,7 @@ public class Logout extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		PrintWriter out = response.getWriter();
-		HttpSession sesion = request.getSession();
-		JSONObject json = new JSONObject();
-		if(sesion.isNew()) {
-			json.put("status", 304).put("res", "session not started");
-		} else {
-			json.put("status", 200).put("res", "session finished");
-		}
-		sesion.invalidate();
-		out.println(json.toString());
+		
 	}
 
 }

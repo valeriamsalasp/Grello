@@ -1,0 +1,66 @@
+body{
+    background-color: #94c6df;
+    background-blend-mode: darken;
+    background-image: url("./img/Grello.png");
+    background-repeat: no-repeat;
+    background-position: 97% -20% ;
+    background-size:  20% 150%;
+}
+#menu {
+    width:300px;
+    font-family:Arial, Helvetica, sans-serif;
+}
+ul {
+    list-style:none;
+}
+.me li a{
+    background-color:rgb(20, 162, 167);
+    color:#fff;
+    text-decoration:none;
+    padding:10px 12px;
+    display:block;
+}
+.me li a:hover{
+    background-color:rgb(27, 226, 233);
+}
+.me > li {
+        float:left;
+}
+.slider{
+    width: 95%;
+    position: absolute;
+    margin-top:10%;
+    margin-left: 2%;
+    overflow: hidden;
+}
+
+.slider ul{
+    display: flex;
+    padding: 0;
+    width: 400%;
+
+    animation: cambio 20s infinite;
+    animation-direction: alternate;
+}
+
+.slider li{
+    width: 100%;
+    list-style: none;
+}
+
+@keyframes cambio{
+    0%{margin-left: 0;}
+    15%{margin-left:0;}
+
+    20%{margin-left: -100%;}
+    35%{margin-left: -100%;}
+
+    40%{margin-left: -200%;}
+    55%{margin-left: -200%;}
+
+    60%{margin-left: -300%;}
+    75%{margin-left: -300%;}
+
+    80%{margin-left: -400%;}
+    100%{margin-left: -400%;}
+}

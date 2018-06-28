@@ -11,6 +11,5 @@
 	<classpathentry kind="lib" path="C:/Develop/apache-tomcat-8.5.20/lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Gressia/Documents/Visual/postgresql-42.2.1.jre7.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Gressia/Downloads/json-20171018.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/postgresql-9.4.1212.jre6.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

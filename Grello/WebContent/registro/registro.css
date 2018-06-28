@@ -1,0 +1,94 @@
+body{
+            background-color: #94c6df;
+
+            background-image: url("../img/fondo3.png");
+            background-blend-mode: normal;
+            background-repeat:  no-repeat;
+            background-position:  45% -30%;
+            background-size: 90% 500%;
+            
+        }  
+        #nombre{
+            width: 10%;
+            position: absolute;
+            margin-top: 17%;
+            margin-left: 35%;
+            
+        }  
+
+        #apellido{
+            width: 10%;
+            position: absolute;
+            margin-top: 17%;
+            margin-left: 47%;
+        }
+        #usuario{
+            width: 10%;
+            position: absolute;
+            margin-top: 20%;
+            margin-left: 35%;
+
+        }
+        #contrasena{
+            width: 10%;
+            position: absolute;
+            margin-top: 20%;
+            margin-left: 47%;
+
+        }
+        #correo{
+            width: 22%;
+            position: absolute;
+            margin-top: 21%;
+            margin-left: 35%;
+            
+        }
+        #crear{
+            width: 10%;
+            position: absolute;
+            margin-top: 23%;
+            margin-left: 41%;
+        }
+        
+        h1{
+            font-size: 120%;
+            position: absolute; 
+            margin-top: 15%; 
+            margin-left: 37%;
+        }
+        h2{
+            font-size: 120%;
+            position: absolute; 
+            margin-top: 15%; 
+            margin-left: 50%;
+        }
+        h3{
+            font-size: 120%;
+            position: absolute; 
+            margin-top: 18%; 
+            margin-left: 37%;
+        }
+        h4{
+            font-size: 120%;
+            position: absolute; 
+            margin-top: 18%; 
+            margin-left: 49%;
+        }
+        h5{
+            font-size: 120%;
+            position: absolute; 
+            margin-top: 20%; 
+            margin-left: 40%;
+        }
+        #cuenta{
+            position: absolute;
+            margin-top: 25%;
+            margin-left: 43%;
+        }
+        #img{
+            width:30%;
+            height: 15%;
+            position: absolute;
+            margin-left: 65%;
+            margin-top: -6%;
+        }

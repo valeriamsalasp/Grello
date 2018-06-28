@@ -1,0 +1,58 @@
+body{
+    background-color: #94c6df;
+
+    background-image: url("../img/fondo3.png");
+    background-blend-mode: normal;
+    background-repeat: no-repeat;
+    background-position:  45% -30% ;
+    background-size:  90% 400%;
+}
+
+#usuario {
+    width: 25%;
+    position: absolute;
+    margin-top: 17.2%;
+    margin-left: 35%;
+    
+}
+
+#contrasena {
+    width: 25%;
+    position: absolute;
+    margin-top: 18.2%;
+    margin-left: 35%;
+    
+}
+
+#iniciar{
+    position: absolute;
+    margin-top: 19.2%;
+    margin-left: 43%;
+}
+
+h1{
+   font-size: 120%;
+   position: absolute; 
+   margin-top: 18.2%; 
+   margin-left: 28%;
+
+} 
+h2{
+    font-size: 120%;
+    position: absolute; 
+    margin-top: 19.5%; 
+    margin-left: 28%;
+}
+#cuenta{
+    position: absolute;
+    margin-top: 20.2%;
+    margin-left: 43.2%;
+}
+
+#img{
+    width:30%;
+    height: 15%;
+    position: absolute;
+    margin-left: 67%;
+    margin-top: -9%;
+}

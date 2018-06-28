@@ -20,6 +20,7 @@ public class LeerProperties {
 		catch(IOException e) {
 			e.printStackTrace();
 		}
+		System.out.println(prop.toString());
 		return prop;
 	}
 }

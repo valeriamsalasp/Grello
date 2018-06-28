@@ -3,7 +3,6 @@ package Servidores;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-//import java.util.Properties;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
@@ -13,10 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-//import org.json.JSONArray;
 import org.json.JSONObject;
 
-//import Grello.LeerProperties;
 import Grello.Queries;
 
 @WebServlet("/Login")
@@ -28,7 +25,7 @@ public class Login extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		//response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -38,22 +35,18 @@ public class Login extends HttpServlet {
 		
 		Queries db = new Queries();
 		JSONObject userData = new JSONObject();
-		HttpSession sesion = request.getSession(true);
-		/*String username = request.getParameter("user_username");
-		String password = request.getParameter("user_password");*/
-		//Properties dataSource = new LeerProperties().getFile("C:\\Users\\Gressia\\git\\Grello\\Grello\\WebContent\\query.properties");
-
+		HttpSession sesion = request.getSession();
+		
+		System.out.println("comenzamos");
 		if(sesion.isNew()) {
 			try {
-				out.println("hola");
+				System.out.println("Obteniendo datos");
 				userData = db.ObtenerDatos(data);
 				System.out.println(userData);
-				//JSONObject users = db.ObtenerDatos(username, password);
 				if(userData.length() > 0) {
 					storeValue(sesion, userData);
 					mensaje.put("status", 200).put("userData", userData);
 					System.out.println("Todo realizado con exito");
-					response.sendRedirect("Grello/loggedin/index.html");
 				}else {
 					mensaje.put("status", 409).put("response", "Invalid username or password");
 					sesion.invalidate();
@@ -65,7 +58,7 @@ public class Login extends HttpServlet {
 				db.closeResources();
 			}
 		} 
-		out.println(userData.toString());
+		out.println(mensaje.toString());
 		
 	}
 	
