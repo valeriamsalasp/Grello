@@ -1,9 +1,8 @@
-package Servidores;
+package Columnas;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.Properties;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
@@ -12,24 +11,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 import org.json.JSONObject;
 
-import Grello.LeerProperties;
 import Grello.Queries;
 
 /**
- * Servlet implementation class Login
+ * Servlet implementation class CrearColumna
  */
-
-@WebServlet("/Registro")
-public class Registro extends HttpServlet {
+@WebServlet("/CrearColumna")
+public class CrearColumna extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+       
     /**
-     * Default constructor. 
+     * @see HttpServlet#HttpServlet()
      */
-    public Registro() {
+    public CrearColumna() {
+        super();
         // TODO Auto-generated constructor stub
     }
 
@@ -38,7 +35,7 @@ public class Registro extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doPost(request, response);
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -52,21 +49,16 @@ public class Registro extends HttpServlet {
 		
 		try {
 			System.out.println("comenzamos");
-			if(!db.VerificarUsuario(data.getString("user_username"))) {
-				System.out.println("Usuario correcto");
-				if(!db.VerificarCorreo(data.getString("user_email"))) {
-					System.out.println("email correcto");
-					boolean status = db.Registrar(data);
-					if (status) {
-						mensaje.put("status", 200).put("response", "El usuario fue creado");
-					}else {
-						System.out.println("El usuario no fue creado");
-					}
+			if(!db.BuscarColumna(data.getString("column_name"))) {
+				System.out.println("Nombre de la columna correcta");
+				boolean status = db.CrearColumna(data);
+				if (status) {
+					mensaje.put("status", 200).put("response", "La columna fue creado");
 				}else {
-					mensaje.put("status", 500).put("response", "este correo ya existe");
+					System.out.println("La columna no fue creado");
 				}
 			}else {
-				mensaje.put("status", 500).put("response:","Este nombre de usuario ya existe");
+				mensaje.put("status", 500).put("response:","Este nombre de columna ya existe");
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -76,4 +68,5 @@ public class Registro extends HttpServlet {
 		out.println(mensaje.toString());
 		
 	}
+
 }

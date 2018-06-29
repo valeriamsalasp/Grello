@@ -5,11 +5,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class BDConexion {
 	public PreparedStatement stmt;
 	public Connection con;
 	public ResultSet rs;
+	public Properties leer= new LeerProperties().getFile("C:\\Users\\Gressia\\git\\Grello\\Grello\\WebContent\\query.properties");
 	
 	public BDConexion(){
 		  try{
@@ -24,19 +26,18 @@ public class BDConexion {
 	}
 	public ResultSet executeStatement(String query,Object...value) throws SQLException{
 		
-			this.stmt = this.con.prepareStatement(query);
+			this.stmt = this.con.prepareStatement(leer.getProperty(query));
 			for(int i=0; i < value.length; i++ )
 				this.stmt.setObject(i + 1, value[i]);
-			
-			//this.rs = this.stmt.executeQuery();
 			
 			return this.stmt.executeQuery();
 			
 			
 	}
 	
+	
 	public int executeUpdate(String query,Object...value) throws SQLException{
-		this.stmt = this.con.prepareStatement(query);
+		this.stmt = this.con.prepareStatement(leer.getProperty(query));
 		for(int i=0; i < value.length; i++ )
 		this.stmt.setObject(i + 1, value[i]);
 		
