@@ -47,7 +47,9 @@ public class Columna extends HttpServlet {
 		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 		Queries db = new Queries();
 		
-		String a = data.getString("tipo");
+		JSONObject columnData = new JSONObject();
+		
+		String a = data.getString("tipo").toString();
 		
 		if(a == "crear") {
 			try {
@@ -56,7 +58,14 @@ public class Columna extends HttpServlet {
 					System.out.println("Nombre de la columna correcta");
 					boolean status = db.CrearColumna(data);
 					if (status) {
-						mensaje.put("status", 200).put("response", "La columna fue creado");
+						System.out.println("La columna fue creada");
+						columnData = db.InformacionColumna(data);
+						if(columnData.length() > 0) {
+							mensaje.put("status", 200).put("response",columnData);
+							System.out.println("Todo realizado con exito");
+						}else {
+							mensaje.put("status", 200).put("response","No se pudo traer los datos de la columna");
+						}
 					}else {
 						mensaje.put("status", 500).put("response","La columna no fue creado");
 					}
@@ -68,7 +77,7 @@ public class Columna extends HttpServlet {
 			} finally {
 				db.closeResources();
 			}
-			out.println(mensaje.toString());
+			
 		}else if(a == "actualizar") {
 			try {
 				boolean status = db.ActualizarTablero(data);
@@ -82,7 +91,7 @@ public class Columna extends HttpServlet {
 			} finally {
 				db.closeResources();
 			}
-			out.println(mensaje.toString());
+			
 		}else if(a == "borrar") {
 			try {
 				boolean status = db.BorrarColumna(data);
@@ -96,8 +105,10 @@ public class Columna extends HttpServlet {
 			} finally {
 				db.closeResources();
 			}
-			out.println(mensaje.toString());
+			
 		}
+		out.println(mensaje.toString());
+		
 	}
 
 }

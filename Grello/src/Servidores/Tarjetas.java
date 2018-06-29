@@ -47,16 +47,16 @@ public class Tarjetas extends HttpServlet {
 		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 		Queries db = new Queries();
 		
-		String a = data.getString("tipo");
+		String a = data.getString("tipo").toString();
 		
 		if(a == "crear") {
 			try {
 				System.out.println("comenzamos");
 				if(!db.BuscarTarjeta(data.getString("card_name"))) {
-					System.out.println("Nombre de laa tarjeta correcta");
+					System.out.println("Nombre de la tarjeta correcta");
 					boolean status = db.CrearTarjeta(data);
 					if (status) {
-						mensaje.put("status", 200).put("response", "El tablero fue creado");
+						mensaje.put("status", 200).put("response", "La tarjeta fue creadas");
 					}else {
 						mensaje.put("status", 500).put("response","La tarjeta no fue creada");
 					}
@@ -68,7 +68,7 @@ public class Tarjetas extends HttpServlet {
 			} finally {
 				db.closeResources();
 			}
-			out.println(mensaje.toString());
+			
 		}else if(a == "actualizarNo") {
 			try {
 				boolean status = db.ActualizarTarjetaNo(data);
@@ -82,7 +82,7 @@ public class Tarjetas extends HttpServlet {
 			} finally {
 				db.closeResources();
 			}
-			out.println(mensaje.toString());
+			
 		}else if(a == "actualizarDe") {
 			try {
 				boolean status = db.ActualizarTarjetaDe(data);
@@ -96,7 +96,8 @@ public class Tarjetas extends HttpServlet {
 			} finally {
 				db.closeResources();
 			}
-			out.println(mensaje.toString());}else if(a == "borrar") {
+			
+			}else if(a == "borrar") {
 			try {
 				boolean status = db.BorrarTarjeta(data);
 				if (status) {
@@ -109,8 +110,10 @@ public class Tarjetas extends HttpServlet {
 			} finally {
 				db.closeResources();
 			}
-			out.println(mensaje.toString());
+			
 		}
+		
+		out.println(mensaje.toString());
 	}
 
 }

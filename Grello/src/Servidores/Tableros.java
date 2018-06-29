@@ -46,29 +46,31 @@ public class Tableros extends HttpServlet {
 		JSONObject mensaje = new JSONObject();
 		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 		Queries db = new Queries();
-		JSONObject userData = new JSONObject();
+		JSONObject userBoard = new JSONObject();
+	
 		
-		String a = data.getString("tipo");
-		boolean b = true;
+		String a = data.getString("tipo").toString();
 		System.out.println(data);
 		System.out.println("a: "+a);
+	
 		
-		if(b) {
+		if("crear".equals(a)) {
 			System.out.println("Entramos en crear Tablero");
 			try {
 				System.out.println("comenzamos");
-				if(db.BuscarTablero(data).length() < 0) {
+				if(!db.BuscarTablero(data.getString("board_name"))) {
 					System.out.println("Nombre del tablero correcto");
-					boolean tablero = db.CrearTablero(data);
-					userData = db.BuscarTablero(data);
-					if(userData.length() > 0) {
-						if(tablero) {
-							boolean status = db.InsertarUsuTa(userData.getString("board_id"), data);
-							mensaje.put("satus", 200).put("response","Ya se creo el tablero");
-							if (status) {
-								mensaje.put("status", 200).put("response", "Ya se le asigno el tablero al usuario");
+					boolean status = db.CrearTablero(data);
+					 userBoard= db.InformacionTablero(data);
+					if(status) {
+						if(userBoard.length() > 0) {
+							boolean nuevaTabla= db.InsertarUsuTa(userBoard.getInt("board_id"), data);
+							System.out.println("Ya se creo el tablero");
+							if (nuevaTabla) {
+								mensaje.put("status", 200).put("response", userBoard);
+								System.out.println("Ya se le asigno el tablero al usuario");
 							}else {
-								mensaje.put("status", 500).put("response","No se le puedo asignar el tablero a el usuario\"");
+								mensaje.put("status", 500).put("response","No se le puedo asignar el tablero a el usuario");
 							}
 						}else {
 							mensaje.put("status", 500).put("response:","No se pudo crear el tablero");
@@ -84,7 +86,7 @@ public class Tableros extends HttpServlet {
 			} finally {
 				db.closeResources();
 			}
-			out.println(mensaje.toString());
+			
 		}else if(a == "actualizar") {
 			System.out.println("Entramos en actualizar Tablero");
 			try {
@@ -99,23 +101,42 @@ public class Tableros extends HttpServlet {
 			} finally {
 				db.closeResources();
 			}
-			out.println(mensaje.toString());
+			
 		}else if(a == "borrar") {
 			System.out.println("Entramos en borrar Tablero");
 			try {
-				boolean status = db.BorrarTablero(data);
-				if (status) {
-					mensaje.put("status", 200).put("response", "El tablero fue borrado");
-				}else {
-					mensaje.put("status", 500).put("response","No se puedo bora");
+				boolean tabla = db.BorrarUsuTa(data);
+				System.out.println("Fue borrado el tablero de la tabla user_board");
+				if(tabla) {
+					boolean status = db.BorrarTablero(data);
+					if (status) {
+						mensaje.put("status", 200).put("response", "El tablero fue borrado");
+						System.out.println("El tablero fue borrado de la tabla board");
+					}else {
+						mensaje.put("status", 500).put("response","No se puedo bora");
+					}
 				}
 			}catch(SQLException e) {
 				e.printStackTrace();
 			} finally {
 				db.closeResources();
 			}
-			out.println(mensaje.toString());
+			
+		}else if(a == "leer") {
+			try {
+				userBoard = db.LeerTablero(data);
+				if(userBoard.length() > 0) {
+					mensaje.put("status", 200).put("response", userBoard);
+					System.out.println("Se realizao la lectura del tablero");
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
+		
+		out.println(mensaje.toString());
 		
 	}
 

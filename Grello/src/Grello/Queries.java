@@ -66,60 +66,99 @@ public class Queries extends BDConexion {
 		}
 	}
 	
-	//Buscar Tablero
-	public JSONObject BuscarTablero (JSONObject user)throws SQLException{
-		this.rs = executeStatement("BuscarTablero", user.getString("board_id"));
+	//Tableros
+	
+	//Buscar Tablero mediante el nombre 
+	public boolean BuscarTablero(String value) throws SQLException{
+		this.rs = executeStatement("BuscarTablero", value);
+		return this.rs.next();
+	}
+	
+	//	Traer la informacion del tablero
+	public JSONObject InformacionTablero (JSONObject user)throws SQLException{
+		this.rs = executeStatement("BuscarTablero", user.getString("board_name"));
 		return this.getData();
 	}
 	
-	
-	//Crear Tableros
+	//Crear Tablero
 	public boolean CrearTablero(JSONObject data) throws SQLException{
-		int i = executeUpdate("CrearTablero", data.getString("board_name"), data .getString("user_id"));
+		int i = executeUpdate("CrearTablero", data.getString("board_name"), data.getInt("user_id"));
+	
 		return (i == 1)?true:false;
 	}
 	
-	//BorrarTablero
-	public boolean BorrarTablero(JSONObject data) throws SQLException{
-		int i = executeUpdate("BorrarTablero", data.getString("boar_id"));
-		return (i == 1)?true:false;
+	//Leer Tablero
+	public JSONObject LeerTablero(JSONObject user)throws SQLException{
+		this.rs = executeStatement("LeerTablero", user.getInt("user_id"));
+		return this.getData();
 	}
 	
 	//Actualizar Tablero
-	public boolean ActualizarTablero(JSONObject data) throws SQLException{
-		int i = executeUpdate("ActualizarTablero", data.getString("board_name"), data .getString("board_id"));
+		public boolean ActualizarTablero(JSONObject data) throws SQLException{
+			int i = executeUpdate("ActualizarTablero", data.getString("board_name"), data .getInt("board_id"));
+			return (i == 1)?true:false;
+		}
+	
+	//Borrar Tablero
+	public boolean BorrarTablero(JSONObject data) throws SQLException{
+		int i = executeUpdate("BorrarTablero", data.getInt("board_id"));
 		return (i == 1)?true:false;
 	}
 	
-	//Insertar en la tabla de user board
-	public boolean InsertarUsuTa(String value, JSONObject data) throws SQLException{
-		int i = executeUpdate("InsertarUsuTa", value, data .getString("user_id"));
+	
+	//Tabla user_board
+	
+	//Insertar en la tabla de user_board
+	public boolean InsertarUsuTa(int value, JSONObject data) throws SQLException{
+		int i = executeUpdate("InsertarUsuTa", value, data .getInt("user_id"));
 		return (i == 1)?true:false;
 	}
+	public boolean BorrarUsuTa(JSONObject data) throws SQLException{
+		int i = executeUpdate("BorrarUsuTa", data.getInt("board_id"));
+		return (i == 1)?true:false;
+	}
+	
+	
+	//Columna
 	
 	//Buscar Columna
 	public boolean BuscarColumna(String value) throws SQLException{
 		this.rs = executeStatement("BuscarColumna", value);
 		return this.rs.next();
 	}
+	//Traer la informacion de la columna
+	public JSONObject InformacionColumna (JSONObject user)throws SQLException{
+		this.rs = executeStatement("BuscarColumna", user.getString("column_name"));
+		return this.getData();
+	}
 	
 	//Crear Columna 
 	public boolean CrearColumna(JSONObject data) throws SQLException{
-		int i = executeUpdate("CrearColumna", data.getString("board_id"), data .getString("column_name"));
+		int i = executeUpdate("CrearColumna", data.getInt("board_id"), data .getString("column_name"));
 		return (i == 1)?true:false;
 	}
 	
-	//Borrar Columna
-	public boolean BorrarColumna(JSONObject data) throws SQLException{
-		int i = executeUpdate("BorrarColumna", data.getString("column_id"));
-		return (i == 1)?true:false;
+	//Leer Columna
+	public JSONObject LeerColumna(JSONObject user)throws SQLException{
+		this.rs = executeStatement("LeerTablero", user.getInt("board_id"));
+		return this.getData();
 	}
 	
 	//Actualizar Columna 
 	public boolean ActualizarColumna(JSONObject data) throws SQLException{
-		int i = executeUpdate("ActualizarColumna", data.getString("column_name"), data .getString("column_id"));
+		int i = executeUpdate("ActualizarColumna", data.getString("column_name"), data .getInt("column_id"));
 		return (i == 1)?true:false;
 	}
+	
+	//Borrar Columna
+		public boolean BorrarColumna(JSONObject data) throws SQLException{
+			int i = executeUpdate("BorrarColumna", data.getInt("column_id"));
+			return (i == 1)?true:false;
+		}
+		
+		
+	
+	//Tarjeta
 	
 	//Buscar Tarjeta
 	public boolean BuscarTarjeta(String value) throws SQLException{
@@ -129,28 +168,34 @@ public class Queries extends BDConexion {
 	
 	//Crear Tarjeta
 	public boolean CrearTarjeta(JSONObject data) throws SQLException{
-		int i = executeUpdate("CrearTarjeta", data.getString("column_id"), data.getString("user_id"), data .getString("card_name")
+		int i = executeUpdate("CrearTarjeta", data.getInt("column_id"), data.getInt("user_id"), data .getString("card_name")
 				, data .getString("card_description"));
 		return (i == 1)?true:false;
 	}
 	
-	//Borrar Tarjeta
-	public boolean BorrarTarjeta(JSONObject data) throws SQLException{
-		int i = executeUpdate("BorrarTarjeta", data.getString("card_id"));
-		return (i == 1)?true:false;
+	//Leer Tarjeta
+	public JSONObject LeerTarjeta(JSONObject user)throws SQLException{
+		this.rs = executeStatement("LeerTablero", user.getInt("column_id"));
+		return this.getData();
 	}
 	
 	//Actualizar el nombre de la Tarjeta
 	public boolean ActualizarTarjetaNo(JSONObject data) throws SQLException{
-		int i = executeUpdate("ActualizarTarjetaNo", data.getString("card_name"), data .getString("card_id"));
+		int i = executeUpdate("ActualizarTarjetaNo", data.getString("card_name"), data .getInt("card_id"));
 		return (i == 1)?true:false;
 	}
 	
 	//Actualizar el descripcion de la Tarjeta
 		public boolean ActualizarTarjetaDe(JSONObject data) throws SQLException{
-			int i = executeUpdate("ActualizarTarjetaDe", data.getString("card_description"), data .getString("card_id"));
+			int i = executeUpdate("ActualizarTarjetaDe", data.getString("card_description"), data .getInt("card_id"));
 			return (i == 1)?true:false;
 		}
+		
+	//Borrar Tarjeta
+	public boolean BorrarTarjeta(JSONObject data) throws SQLException{
+		int i = executeUpdate("BorrarTarjeta", data.getInt("card_id"));
+		return (i == 1)?true:false;
+	}
 	
 	
 	
