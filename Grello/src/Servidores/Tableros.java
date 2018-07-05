@@ -134,6 +134,17 @@ public class Tableros extends HttpServlet {
 				e.printStackTrace();
 			}
 			
+		}else if(a == "permisologia") {
+			try {
+				boolean status = db.ActualizarEstado(data);
+				if(userBoard.length() > 0) {
+					mensaje.put("status", 200).put("response", status);
+					System.out.println("Se realizao la actualizacion de estado del tablero");
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		out.println(mensaje.toString());

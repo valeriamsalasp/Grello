@@ -46,6 +46,7 @@ public class Tarjetas extends HttpServlet {
 		JSONObject mensaje = new JSONObject();
 		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 		Queries db = new Queries();
+		JSONObject cardData = new JSONObject();
 		
 		String a = data.getString("tipo").toString();
 		
@@ -55,8 +56,15 @@ public class Tarjetas extends HttpServlet {
 				if(!db.BuscarTarjeta(data.getString("card_name"))) {
 					System.out.println("Nombre de la tarjeta correcta");
 					boolean status = db.CrearTarjeta(data);
+					cardData = db.LeerTarjeta(data);
 					if (status) {
-						mensaje.put("status", 200).put("response", "La tarjeta fue creadas");
+						System.out.println("La tarjeta fue creada");
+						if(cardData.length() > 0) {
+							mensaje.put("status", 200).put("response", cardData);
+							System.out.println("Todo realizado conexito");
+						}else {
+							mensaje.put("status", 500).put("response","No se pudo retornar la informaion de la tarjeta");
+						}
 					}else {
 						mensaje.put("status", 500).put("response","La tarjeta no fue creada");
 					}

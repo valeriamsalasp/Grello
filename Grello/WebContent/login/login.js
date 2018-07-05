@@ -1,4 +1,4 @@
-var userLogin, boardId;
+var userLogin, boardId, columnId, boardId;
 
 leerTablero();
 
@@ -60,6 +60,7 @@ function crearTablero(){
             if(data.status == 200){
                 location.href ="../tableros/index.html";
                 localStorage.setItem('tableros', JSON.stringify(boardDData));
+                localStorage.setItem('nombreTablero', JSON.stringify(boardData.board_name));
                 localStorage.setItem('boardId', JSON.stringify(boardData.board_id))
             }
         });		
@@ -74,7 +75,7 @@ function crearColumna(){
 	
 	var json ={
             tipo: "crear",
-            board_id: userLogin,
+            board_id: boardId,
             column_name: nombre
     }
     
@@ -91,17 +92,52 @@ function crearColumna(){
     fetch('../Columna', configs)
         .then(res => res.json())
         .then(data => {console.log(data)
-        	let boardData = data.userBoard;
+        	let columnData = data.columnData;
             if(data.status == 200){
                 location.href ="../tableros/index.html";
-                localStorage.setItem('tableros', JSON.stringify(boardDData));
-                localStorage.setItem('boardId', JSON.stringify(boardData.board_id))
+                localStorage.setItem('columnas', JSON.stringify(columnData));
+                localStorage.setItem('columnId', JSON.stringify(columnData.column_id))
             }
         });
 	
 }
 
 function crearTarjeta(){
+	
+	userLogin = localStorage.getItem("id");
+	columnId = localStorage.getItem("columnId")
+	
+	var nombre = prompt('Ingrese el nombre de la tarjeta: ');
+	var descripcion = prompt("Ingrese la descripcion de la tarjeta");
+	
+	var json ={
+            tipo: "crear",
+            column_id: columnId,
+            user_id: userLogin,
+            card_name: nombre,
+            card_desccription: descripcion
+    }
+    
+    
+    let configs = {
+            method: 'post',
+            body: JSON.stringify(json),
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/json'
+            }
+    }
+    fetch('../Tarjeta', configs)
+        .then(res => res.json())
+        .then(data => {console.log(data)
+        	let boardData = data.userBoard;
+            if(data.status == 200){
+                localStorage.setItem('tarjetas', JSON.stringify(cardDData));
+                localStorage.setItem('cardId', JSON.stringify(cardData.card_id))
+            }
+        });
+	
 	
 }
 
@@ -135,5 +171,9 @@ function leerTablero(){
 	            }
 	        });	
 	}
+	
+}
+
+function LeerColumna(){
 	
 }

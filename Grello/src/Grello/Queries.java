@@ -140,7 +140,7 @@ public class Queries extends BDConexion {
 	
 	//Leer Columna
 	public JSONObject LeerColumna(JSONObject user)throws SQLException{
-		this.rs = executeStatement("LeerTablero", user.getInt("board_id"));
+		this.rs = executeStatement("LeerTablero", user.getInt("board_name"));
 		return this.getData();
 	}
 	
@@ -175,7 +175,7 @@ public class Queries extends BDConexion {
 	
 	//Leer Tarjeta
 	public JSONObject LeerTarjeta(JSONObject user)throws SQLException{
-		this.rs = executeStatement("LeerTablero", user.getInt("column_id"));
+		this.rs = executeStatement("LeerTablero", user.getString("column_name"));
 		return this.getData();
 	}
 	
@@ -194,6 +194,14 @@ public class Queries extends BDConexion {
 	//Borrar Tarjeta
 	public boolean BorrarTarjeta(JSONObject data) throws SQLException{
 		int i = executeUpdate("BorrarTarjeta", data.getInt("card_id"));
+		return (i == 1)?true:false;
+	}
+	
+	
+	
+	//Permisologia de los tableros
+	public boolean ActualizarEstado(JSONObject data) throws SQLException{
+		int i = executeUpdate("ActualizarEstado", data.getString("type_board_user_desccription"), data .getInt("board_id"));
 		return (i == 1)?true:false;
 	}
 	
