@@ -2,6 +2,7 @@ package Grello;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.sql.*;
 
 import org.json.JSONObject;
@@ -9,6 +10,7 @@ import org.json.JSONObject;
 public class Queries extends BDConexion {
 	private ResultSet rs;
 	private ResultSetMetaData rsmd;
+	private ArrayList <JSONObject> array = new ArrayList<JSONObject>();
 	
 	public Queries() {
 		super();
@@ -25,6 +27,25 @@ public class Queries extends BDConexion {
 		return userData;
 	}
 	
+	private ArrayList<JSONObject> getArray() throws SQLException {
+		
+		int f = 0;
+		
+		while(this.rs.next()) {	
+			JSONObject userData = new JSONObject();
+			this.rsmd = rs.getMetaData();
+			for(int i = 1; i <= this.rsmd.getColumnCount(); i++) {
+				userData.put(rsmd.getColumnLabel(i), rs.getObject(i));
+			}
+			System.out.println("contenido: "+ userData);
+			array.add( f,userData);
+			f++;	
+			
+		}
+		System.out.println("array f: "+ array);
+		return array;	
+	}
+
 	//Verificar el usuario
 	public boolean VerificarUsuario(String value) throws SQLException{
 		this.rs = executeStatement("BuscarUsuario", value);
@@ -66,7 +87,7 @@ public class Queries extends BDConexion {
 		}
 	}
 	
-	//Tableros
+	//-----------------------------------------Tableros---------------------------------------------------
 	
 	//Buscar Tablero mediante el nombre 
 	public boolean BuscarTablero(String value) throws SQLException{
@@ -88,8 +109,14 @@ public class Queries extends BDConexion {
 	}
 	
 	//Leer Tablero
-	public JSONObject LeerTablero(JSONObject user)throws SQLException{
+	public ArrayList<JSONObject> LeerTablero(JSONObject user)throws SQLException{
 		this.rs = executeStatement("LeerTablero", user.getInt("user_id"));
+		return this.getArray();
+	}
+	
+	//Leer toda la cantidad de los tableros
+	public JSONObject LeerTableros(int a, JSONObject user)throws SQLException{
+		this.rs = executeStatement("LeerTableros", a, user.getInt("user_id"));
 		return this.getData();
 	}
 	
@@ -119,11 +146,11 @@ public class Queries extends BDConexion {
 	}
 	
 	
-	//Columna
+	//-------------------------------------------Columna-----------------------------------------------
 	
 	//Buscar Columna
-	public boolean BuscarColumna(String value) throws SQLException{
-		this.rs = executeStatement("BuscarColumna", value);
+	public boolean BuscarColumna(JSONObject user) throws SQLException{
+		this.rs = executeStatement("BuscarColumna", user.getString("column_name"), user.getInt("board_id"));
 		return this.rs.next();
 	}
 	//Traer la informacion de la columna
@@ -137,11 +164,16 @@ public class Queries extends BDConexion {
 		int i = executeUpdate("CrearColumna", data.getInt("board_id"), data .getString("column_name"));
 		return (i == 1)?true:false;
 	}
+	//Leer Columna recien ingresada
+		public JSONObject LeerColumna(JSONObject user)throws SQLException{
+			this.rs = executeStatement("LeerColumna", user.getString("column_name"));
+			return this.getData();
+		}
 	
-	//Leer Columna
-	public JSONObject LeerColumna(JSONObject user)throws SQLException{
-		this.rs = executeStatement("LeerTablero", user.getInt("board_name"));
-		return this.getData();
+	//Leer Columna de los tableros
+	public ArrayList<JSONObject> LeerColumnaTablero(JSONObject user)throws SQLException{
+		this.rs = executeStatement("LeerColumnaTablero", user.getInt("board_id"));
+		return this.getArray();
 	}
 	
 	//Actualizar Columna 
@@ -158,7 +190,7 @@ public class Queries extends BDConexion {
 		
 		
 	
-	//Tarjeta
+	//---------------------------------------------Tarjeta------------------------------------------------------------------
 	
 	//Buscar Tarjeta
 	public boolean BuscarTarjeta(String value) throws SQLException{
@@ -173,23 +205,24 @@ public class Queries extends BDConexion {
 		return (i == 1)?true:false;
 	}
 	
-	//Leer Tarjeta
-	public JSONObject LeerTarjeta(JSONObject user)throws SQLException{
-		this.rs = executeStatement("LeerTablero", user.getString("column_name"));
-		return this.getData();
+	//Leer Tarjetas de la columna
+		public JSONObject LeerTarjeta(JSONObject user)throws SQLException{
+			this.rs = executeStatement("LeerTarjeta", user.getString("card_name"));
+			return this.getData();
+		}
+	
+	//Leer Tarjetas de la columna
+	public ArrayList<JSONObject> LeerTarjetaColumna(JSONObject user)throws SQLException{
+		this.rs = executeStatement("LeerTarjetaColumna", user.getInt("column_id"));
+		return this.getArray();
 	}
 	
-	//Actualizar el nombre de la Tarjeta
-	public boolean ActualizarTarjetaNo(JSONObject data) throws SQLException{
-		int i = executeUpdate("ActualizarTarjetaNo", data.getString("card_name"), data .getInt("card_id"));
+	//Actualizar Tarjeta
+	public boolean ActualizarTarjeta(JSONObject data) throws SQLException{
+		int i = executeUpdate("ActualizarTarjeta", data.getString("card_name"), data.getString("card_description"),data .getInt("card_id"));
 		return (i == 1)?true:false;
 	}
 	
-	//Actualizar el descripcion de la Tarjeta
-		public boolean ActualizarTarjetaDe(JSONObject data) throws SQLException{
-			int i = executeUpdate("ActualizarTarjetaDe", data.getString("card_description"), data .getInt("card_id"));
-			return (i == 1)?true:false;
-		}
 		
 	//Borrar Tarjeta
 	public boolean BorrarTarjeta(JSONObject data) throws SQLException{
@@ -198,10 +231,10 @@ public class Queries extends BDConexion {
 	}
 	
 	
-	
+	//--------------------------------------Permisologia------------------------------------------------------------
 	//Permisologia de los tableros
 	public boolean ActualizarEstado(JSONObject data) throws SQLException{
-		int i = executeUpdate("ActualizarEstado", data.getString("type_board_user_desccription"), data .getInt("board_id"));
+		int i = executeUpdate("ActualizarEstado", data.getInt("type_board_user_id"), data .getInt("board_id"));
 		return (i == 1)?true:false;
 	}
 	

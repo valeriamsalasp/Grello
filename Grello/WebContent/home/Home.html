@@ -1,0 +1,189 @@
+<html lang="en">
+
+  <head>
+        <script src="./js/jquery-3.3.1.min.js"></script>
+		<script src="./js/bootstrap.min.js"> </script>
+		<link rel= "stylesheet" href="./css/bootstrap.min.css"></link>
+		<meta charset= "utf-8">
+		<meta name= "viewport" content="width=device-width, initial-scale=1">
+		<link rel="icon" href="../img/profileGrello.ico">
+        <style>
+            .img{
+                position: absolute;
+            }
+        </style>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+
+    <title>Home Grello</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
+
+    <!-- Plugin CSS -->
+    <link href="../vendor/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom styles for this template -->
+    <link href="../css/freelancer.min.css" rel="stylesheet">
+
+  </head>
+
+  <body id="page-top">      
+            <!-- Navigation -->
+            <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
+              <div class="container">
+                <a class="navbar-brand js-scroll-trigger" href="#page-top"><img  src ="../img/logo.png" height="7%" width="40%"  id="img"></a>
+                <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                  Menu
+                  <i class="fa fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                  <ul class="navbar-nav ml-auto">
+                  	<li class="nav-item mx-0 mx-lg-1">
+                		<input class="form-control " id="buscador" type="text" placeholder="Ingrese su busqueda" style="margin-top:5%; margin-left:-80%"required="required" data-validation-required-message="Ingrese su busqueda">
+                	</li>
+                	<li class="nav-item mx-0 mx-lg-1">
+                  		<button id="buscadorBoton" type="button" onclick="" class="btn btn-info add-new" style="margin-top:25%; margin-left:-370%; background-color: #1b9891;" data-toggle="modal" ><img src="../img/buscador.png" style="width:20px; height:20px;">
+					</li>
+					</button>
+                    <li class="nav-item mx-0 mx-lg-1">
+                      <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#Tableros">Tableros</a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                      <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#Home">Perfil</a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                    	<a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#" onclick="cerrar()">Cerrar</a>             
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </nav>
+            
+            
+        
+            <!-- Header -->
+            <header class="masthead bg-primary text-white text-center">
+              <div class="container">
+                <img class="img-fluid mb-5 d-block mx-auto" src="../img/profileGrello.png " height="20%" width="30%" alt="">
+                <h1 class="text-uppercase mb-0">Grello</h1>
+                <hr class="star-light">
+                <h2 class="font-weight-light mb-0">Organiza tu vida - Crea tableros</h2>
+              </div>
+            </header>
+        
+            <!-- Portfolio Grid Section boards-->
+            
+            <!-- -------------------------------------------Agregar Tablero--------------------------------------------- -->
+            <section class="portfolio" id="BoardSection">
+              <div class="container" id="Tableros">
+                <h2 class="text-center text-uppercase text-secondary mb-0">Tableros</h2>
+                <hr class="star-dark mb-5">
+ 			<div id="boards" class="row content">
+				<div class="col-md-4">
+					<div class="card w-40" style="width: inherit; margin-top:auto;">
+						<div class="card-header text-center"> 
+							
+							<button id="crear" type="button" onclick="" class="btn btn-info add-new" style="background-color: #1b9891;" data-toggle="modal" data-target="#create"><img src="../img/plus.png" style="width:30px; hight:30px;" >
+									Agregar Tablero
+								</button> 
+							
+							<div class="card-body">
+							</div>
+							<br>
+						</div>
+					</div>	
+				</div>
+			
+				
+			
+            </section>
+            
+            <!-- -------------------------------------Crear Tablero------------------------------------------------ -->
+            <div id="create" class="modal fade">
+				<div class="modal-dialog modal-sm">
+					<div class="modal-content">
+						<form>
+							<div class="modal-header">						
+								<h4 class="modal-title"><center>Agregar nuevo tablero</center></h4>
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							</div>
+							<div class="modal-body">					
+								<div class="form-group">
+									<label>Nombre</label>
+									<input type="text" class="form-control"  id="cardName" required="required" placeholder="Enter name">
+								</div>				
+							</div>
+							<div class="modal-footer">
+								<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+								<input type="button" id="addBoard" class="btn btn-success add-new" value="Crear" onclick="crearTablero()" >
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+            
+            <!-- ---------------------------------------------Modificar tablero---------------------------------------------- -->
+  
+            
+            <div id="update" class="modal fade">
+				<div class="modal-dialog modal-sm">
+					<div class="modal-content">
+						<form>
+							<div class="modal-header">						
+								<h4 class="modal-title"><center>Modificar tablero</center></h4>
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							</div>
+							<div class="modal-body">					
+								<div class="form-group">
+									<label>Nombre</label>
+									<input type="text" class="form-control"  id="cardNameUpdate" required="required" placeholder="Enter name">
+								</div>				
+							</div>
+							<div class="modal-footer">
+								<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+								<input type="button" id="addBoard" class="btn btn-success add-new" value="Modificar" onclick="actualizarTablero(`${ID}`)" >
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+        
+            
+        
+            <!-- Bootstrap core JavaScript -->
+            <script src="../vendor/jquery/jquery.min.js"></script>
+            <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        
+            <!-- Plugin JavaScript -->
+            <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+            <script src="../vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+        
+            <!-- Contact Form JavaScript -->
+            <script src="../js/jqBootstrapValidation.js"></script>
+            <script src="../js/contact_me.js"></script>
+        
+            <!-- Custom scripts for this template -->
+            <script src="../js/freelancer.min.js"></script>
+			<script>
+				$("#addBoard").on('click', function(e){
+					enviarBoard();
+				});
+				
+				
+			</script>
+			<script src="../login/login.js"></script>
+			<script src="../home/home.js"></script>
+			<script>
+				leerTablero();
+			</script>
+			
+          </body>
+        
+        </html>

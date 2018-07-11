@@ -1,0 +1,260 @@
+<!DOCTYPE hmtl>
+<html lang="en">
+
+  <head>
+        <script src="./js/jquery-3.3.1.min.js"></script>
+		<script src="./js/bootstrap.min.js"> </script>
+		<script src="./js/bootstrap-dropdown.js"> </script>
+		<link rel= "stylesheet" href="./css/bootstrap.min.css"></link>
+		<meta charset= "utf-8">
+		<meta name= "viewport" content="width=device-width, initial-scale=1">
+		<link rel="icon" href="../img/profileGrello.ico">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+
+    <title>Home Grello</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
+
+    <!-- Plugin CSS -->
+    <link href="../vendor/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom styles for this template -->
+    <link href="../css/freelancer.min.css" rel="stylesheet">
+
+  </head>
+
+  <body id="page-top">
+        
+            <!-- Navigation -->
+            <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
+              <div class="container">
+                <a class="navbar-brand js-scroll-trigger" href="../home/Home.html"><img  src ="../img/logo.png" height="8%" width="50%"  id="img"></a>
+                <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                  Menu
+                  <i class="fa fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                  	<li class="nav-item mx-0 mx-lg-1">
+                		<input class="form-control " id="buscador" type="text" placeholder="Ingrese su busqueda" style="margin-top:5%; margin-left:-80%"required="required" data-validation-required-message="Ingrese su busqueda">
+                	</li>
+                	<li class="nav-item mx-0 mx-lg-1">
+                  		<button id="buscadorBoton" type="button" onclick="" class="btn btn-info add-new" style="margin-top:25%; margin-left:-370%; background-color: #1b9891;" data-toggle="modal" ><img src="../img/buscador.png" style="width:20px; height:20px;">
+					</li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                      <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="../home/Home.html">Tableros</a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                      <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#Home">Perfil</a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                    	<a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#" onclick="cerrar()">Cerrar</a>             
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </nav>
+			<br>
+			<br>
+			
+			
+			
+	<section class="portfolio" id="TipoTableros">		
+		<div class="dropdown">
+			Nombre
+	  		<button class="btn dropdown-toggle " type="button" id="dropdownMenu1" data-toggle="dropdown" data-hover="dropdown">
+	    		Tipo de tableros
+	   	 		<span class="caret"></span>
+	  		</button>
+	 
+		  <ul class="dropdown-menu" role="menu" id="menu" aria-labelledby="dropdownMenu1">
+		    <li role="presentation">
+		      <a role="menuitem" tabindex="-1" href="#">Privado</a>
+		    </li>
+		    <li role="presentation">
+		      <a role="menuitem" tabindex="-1" href="#">Equipo</a>
+		    </li>
+		    <li role="presentation">
+		      <a role="menuitem" tabindex="-1" href="#">Publico</a>
+		    </li>
+		  </ul>
+		</div>
+	</section>
+			
+			
+	<!--  --------------------------------------Agregar Columna------------------------------------------------------ -->
+	<div class="container">
+		<div class="deck-container">
+			<div class="card-deck" id="card-deck">
+				<div class="column" style="width:250px;" id="add-columns">
+					<div class="card" id="card-crear" style="width: 20rem; margin-top:50px;">
+						<div class="card-body text-center">
+							<div class="card-header" id="header-input"><input id="column_name" type="text" class="form-control" placeholder="Titulo de la Columna" />
+							<br>
+							<button type="button" class="btn btn-info add-column" onclick="crearColumna()" style="background-color: #1b9891;"><img src="../img/plus.png" style="width:30px; hight:30px;">
+							Agregar
+							</button>
+						</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!--  --------------------------------------Mdificar Columna------------------------------------------------------ -->
+	<div id="update" class="modal fade">
+				<div class="modal-dialog modal-sm">
+					<div class="modal-content">
+						<form>
+							<div class="modal-header">						
+								<h4 class="modal-title"><center>Modificar Columna</center></h4>
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							</div>
+							<div class="modal-body">					
+								<div class="form-group">
+									<label>Nombre</label>
+									<input type="text" class="form-control"  id="columnNameUpdate" required="required" placeholder="Enter name">
+								</div>				
+							</div>
+							<div class="modal-footer">
+								<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+								<input type="button" id="addBoard" class="btn btn-success add-new" value="Modificar" onclick="actualizarColumna(`${ID}`)" >
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	
+	<section class="portfolio" id="BoardSection">
+    	<div class="container" id="column">
+		</div>
+    </section>
+    
+    <!-- ------------------------------------------------Agregar Tarjeta------------------------------------------------------- -->
+    <div id="insertCard" class="modal fade">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<form>
+					<div class="modal-header">						
+						<h4 class="modal-title"><center>Crear Tarjeta</center></h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">					
+						<div class="form-group">
+							<label>Nombre</label>
+							<input type="text" class="form-control"  id="cardName" required="required" placeholder="Enter name">
+							<label>Descripcion</label>
+							<input type="text" class="form-control"  id="cardDescription" required="required" placeholder="Enter name">
+						</div>				
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+						<input type="button" id="addBoard" class="btn btn-success add-new" value="Agregar" onclick="crearTarjeta(`${ID}`)" >
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	
+	<!-- ------------------------------------------------Modificar Trajeta---------------------------------------------------- -->		
+	<div id="updateCard" class="modal fade">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<form>
+					<div class="modal-header">						
+						<h4 class="modal-title"><center>Modificar Tarjeta</center></h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">					
+						<div class="form-group">
+							<label>Nombre</label>
+							<input type="text" class="form-control"  id="cardNameUpdate" required="required" placeholder="Enter name">
+							<label>Descripcion</label>
+							<input type="text" class="form-control"  id="cardDescriptionUpdate" required="required" placeholder="Enter name">
+						</div>				
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+						<input type="button" id="addBoard" class="btn btn-success add-new" value="Modificar" onclick="actualizarTarjeta(`${ID}`)" >
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+		
+	<script>
+	const id = document.location.search.split("=")[1];
+	console.log(id)
+	
+	/*var card = `
+				<div class="card" draggable="true" ondragstart="drag(event)">
+				<div class="card-header"> <input type="text" id="c-header" class="form-control" placeholder="Titulo"/></div>
+					<div class="card-body">
+						<textarea id="card-a" class="form-control" type="text" name="card" placeholder="Escriba algo aqui"></textarea>
+						<a class="delete-card" title="Delete Card" data-toggle="tooltip"><img src="../img/delete.png" style="width:25px; hight:25px;"/></a>
+						<a class="a-card" title="Add Card" data-toggle="tooltip" onclick="deshabilitarN(this);"><button type="button" class="btn btn-c"/></a>
+						<a class="edit-card" title="Editar" data-toggle="tooltip" onclick="habilitarN(this);"></a>
+					</div>
+				</div>
+			`;
+	
+	var column = `
+				<div class="column" ondrop="drop(event)" ondragover="allowDrop(event)">
+					<div class="column-header" ><input id="i-header" type="text" class="form-control" placeholder="Titulo"/>
+					<a class="delete-column" title="Borrar columna" data-toggle="tooltip"><img src="../img/delete.png" style="width:25px; hight:25px;"></a>
+					<a class="a-column" title="Agregar columna" data-toggle="tooltip"></a>
+					</div>
+					`+card+`
+					<button type="button" onclick="add_tarjeta(this)" class="btn add-card" title="Add Card"></button>
+				</div>
+				`;
+				
+		function add_column(){
+		crearColumna();
+		$(column).insertBefore($("#card-crear").parent());
+		}
+	function add_tarjeta(btn){
+		$(card).insertBefore(btn);
+	}*/
+	/*$(document).ready(function(){
+		// Delete Column
+		$(document).on("click", ".delete-column", function() {
+			$(this).parents(".column").remove();
+			$(column).removeAttr("disabled");
+			});
+		
+		// Edit Card
+		$(document).on("click", ".edit-card", function(){
+	        $(this).parents(".card").find(".card_name:not(:last-child)").each(function(){
+				$(this).html('<input type="text" class="form-control" value="' + $(this).text() + '">');
+			});		
+	    });
+		// Delete Card
+		$(document).on("click", ".delete-card", function() {
+			$(this).parents(".card").remove();
+			});
+		
+	});*/
+				
+					
+
+
+	</script>
+	<script src="../login/login.js"></script>
+	<script src="tableros.js"></script>
+	<script src="../home/home.js"></script>
+			
+			
+
+    </body>
+</html>

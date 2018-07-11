@@ -3,6 +3,7 @@ package Servidores;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
@@ -46,15 +47,17 @@ public class Columna extends HttpServlet {
 		JSONObject mensaje = new JSONObject();
 		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 		Queries db = new Queries();
+		ArrayList <JSONObject> arrayColumn = new ArrayList<JSONObject>();
 		
 		JSONObject columnData = new JSONObject();
 		
 		String a = data.getString("tipo").toString();
+		System.out.println("la data es: "+data);
 		
-		if(a == "crear") {
+		if("crear".equals(a)) {
 			try {
 				System.out.println("comenzamos");
-				if(!db.BuscarColumna(data.getString("column_name"))) {
+				if(!db.BuscarColumna(data)){
 					System.out.println("Nombre de la columna correcta");
 					boolean status = db.CrearColumna(data);
 					if (status) {
@@ -78,9 +81,10 @@ public class Columna extends HttpServlet {
 				db.closeResources();
 			}
 			
-		}else if(a == "actualizar") {
+		}else if("actualizar".equals(a)) {
 			try {
-				boolean status = db.ActualizarTablero(data);
+				System.out.println("Empezamos Actualizar columna");
+				boolean status = db.ActualizarColumna(data);
 				if (status) {
 						mensaje.put("status", 200).put("response", "El tablero fue actualizado");
 				}else {
@@ -92,13 +96,13 @@ public class Columna extends HttpServlet {
 				db.closeResources();
 			}
 			
-		}else if(a == "borrar") {
+		}else if("borrar".equals(a)) {
 			try {
 				boolean status = db.BorrarColumna(data);
 				if (status) {
 					mensaje.put("status", 200).put("response", "La columna fue borrada");
 				}else {
-					mensaje.put("status", 500).put("response","No se puedo bora");
+					mensaje.put("status", 500).put("response","No se puedo borrar");
 				}
 			}catch(SQLException e) {
 				e.printStackTrace();
@@ -106,6 +110,19 @@ public class Columna extends HttpServlet {
 				db.closeResources();
 			}
 			
+		}else if("leer".equals(a)) {
+			try {
+				System.out.println("Comenzamos con la lectura de las columnas");
+				arrayColumn = db.LeerColumnaTablero(data);
+				if(!arrayColumn.isEmpty()) {
+					mensaje.put("status", 200).put("response",arrayColumn);
+					System.out.println("Se ha realizado la lectura de las columnas");
+					System.out.println(arrayColumn);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		out.println(mensaje.toString());
 		

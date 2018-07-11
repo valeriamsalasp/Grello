@@ -3,6 +3,7 @@ package Servidores;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
@@ -47,6 +48,7 @@ public class Tableros extends HttpServlet {
 		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 		Queries db = new Queries();
 		JSONObject userBoard = new JSONObject();
+		ArrayList<JSONObject> dataBoard = new ArrayList<JSONObject>();
 	
 		
 		String a = data.getString("tipo").toString();
@@ -87,7 +89,7 @@ public class Tableros extends HttpServlet {
 				db.closeResources();
 			}
 			
-		}else if(a == "actualizar") {
+		}else if("actualizar".equals(a)) {
 			System.out.println("Entramos en actualizar Tablero");
 			try {
 				boolean status = db.ActualizarTablero(data);
@@ -102,7 +104,7 @@ public class Tableros extends HttpServlet {
 				db.closeResources();
 			}
 			
-		}else if(a == "borrar") {
+		}else if("borrar".equals(a)) {
 			System.out.println("Entramos en borrar Tablero");
 			try {
 				boolean tabla = db.BorrarUsuTa(data);
@@ -122,19 +124,21 @@ public class Tableros extends HttpServlet {
 				db.closeResources();
 			}
 			
-		}else if(a == "leer") {
+		}else if("leer".equals(a)) {
 			try {
-				userBoard = db.LeerTablero(data);
-				if(userBoard.length() > 0) {
-					mensaje.put("status", 200).put("response", userBoard);
-					System.out.println("Se realizao la lectura del tablero");
+				System.out.println("Comenzamos con la lectura");
+				dataBoard = db.LeerTablero(data);
+				if(!dataBoard.isEmpty()) {
+					mensaje.put("status", 200).put("response", dataBoard);
+					System.out.println("Se ha realizado la lectura del tablero");
+					System.out.println(dataBoard);
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
-		}else if(a == "permisologia") {
+		}else if("permisologia".equals(a)) {
 			try {
 				boolean status = db.ActualizarEstado(data);
 				if(userBoard.length() > 0) {
