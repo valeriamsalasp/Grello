@@ -80,7 +80,7 @@ function crearColumna(){
 	
 	var json ={
             tipo: "crear",
-            board_id: id,
+            board_id: Id,
             column_name: document.getElementById("column_name").value
     }
     
@@ -155,12 +155,12 @@ const goToUpdate = (id) => {
 	console.log(document.location);
 }
 //------------------------------------------------Leer---------------------------------------------------------------
-function leerTablero(){
-	userLogin = localStorage.getItem("id");
-	
+function leerTablero(t){
+		userLogin = localStorage.getItem("id");
 		var json ={
 	            tipo: "leer",
-	            user_id: userLogin
+	            user_id: userLogin,
+	            type_board_user_id:t
 	    }
 	    
 	    
@@ -189,8 +189,6 @@ function leerTablero(){
 								</button>
 								<button id="eliminar" type="button" onclick="borrarTablero(${boardData[i].board_id})" class="btn btn-info add-new" style="background-color: #1b9891;" data-toggle="modal" ><img src="../img/delete.png" style="width:30px; height:30px;">
 								</button>
-								<button id="agregarCoperador" type="button" onclick="" class="btn btn-info add-new" style="background-color: #1b9891;" data-toggle="modal" ><img src="../img/cooperador.png" style="width:30px; height:30px;">
-								</button>
 		        				<div onclick="goToDetails(${boardData[i].board_id})" onclass="card w-40" style="width: inherit; margin-top:auto;">
 			        				<div class="card-header text-center">  
 			        					
@@ -212,6 +210,60 @@ function leerTablero(){
 	        });
 	
 	
+}
+
+function leerTableroOtroUsuario(i, t){
+	var json ={
+            tipo: "leer",
+            user_id: i,
+            type_board_user_id:t
+    }
+    
+    
+    let configs = {
+            method: 'post',
+            body: JSON.stringify(json),
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/json'
+            }
+    }
+    fetch('../Tableros', configs)
+        .then(res => res.json())
+        .then(data => {
+        	console.log(data)
+        	let boardData = data.response;
+        	
+    		if(data.status == 200){
+    			for (var i = 0; i < boardData.length; i++){
+        			console.log("board id "+i+": "+boardData[i].board_id);	        			
+        			let container = `
+	        			<div class="col-md-4" style="padding-bottom:10px">
+	        				<button id="modificar" type="button" onclick="goToUpdate(${boardData[i].board_id})" class="btn btn-info add-new" style="background-color: #1b9891;" data-toggle="modal" data-target="#update"><img src="../img/plus.png" style="width:30px; height:30px;" >
+								Modificar
+							</button>
+							<button id="eliminar" type="button" onclick="borrarTablero(${boardData[i].board_id})" class="btn btn-info add-new" style="background-color: #1b9891;" data-toggle="modal" ><img src="../img/delete.png" style="width:30px; height:30px;">
+							</button>
+	        				<div onclick="goToDetails(${boardData[i].board_id})" onclass="card w-40" style="width: inherit; margin-top:auto;">
+		        				<div class="card-header text-center">  
+		        					
+									<br>
+									${boardData[i].board_name}
+	        						<div class="card-body"></div>
+									<br>
+	        					</div>
+	        				</div>	
+	        			</div>`;
+    	        	document.getElementById("boards").innerHTML += container; 
+    	        	
+	                /*localStorage.setItem('tableros', JSON.stringify(boardData));
+	                localStorage.setItem('boardId', JSON.stringify(boardData));
+	                localStorage.setItem('boardName', JSON.stringify(boardData.board_name))*/
+    			}	
+    		}	
+        	 
+        });
 }
 
 
@@ -313,6 +365,39 @@ function leerTarjeta(t, x){
         	 
         });
 
+	
+}
+
+function leerInvitado(t){
+	var json ={
+			tipo:"leer",
+            board_id: t
+    }
+  
+    let configs = {
+            method: 'post',
+            body: JSON.stringify(json),
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/json'
+            }
+    }
+    fetch('../InvitadosBuscador', configs)
+        .then(res => res.json())
+        .then(data => {console.log(data)
+        	let invitadoData = data.response;
+            if(data.status == 200){
+            	console.log("Todo bien");
+            	for(var i=0; i <invitadoData.leght ; i++){
+	            	var invitado = `
+	    				<div class="card" draggable="true" ondragstart="drag(event)">
+	    				${invitadoData[i].user_username}
+	    				</div>`
+	            		$(invitado).insertBefore($("#agregarInvitado").parent());
+            	}
+            }
+        });
 	
 }
 
@@ -503,4 +588,62 @@ function borrarTarjeta(t){
         });	
 	window.location.reload(false);
 }
+
+//---------------------------------------------Buscador---------------------------------------------------------------
+function buscar(){
+    let configs = {
+            method: 'get',
+            //body: JSON.stringify(json),
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/json'
+            }
+    }
+	
+	var url = '../InvitadosBuscador?user_username='+document.getElementById("buscador").value
+
+    fetch(url, configs)
+    	.then( r => r.json() )
+        //.then(res => res.json())
+        .then(data => {console.log(data)
+        	let userData = data.userData;
+            if(data.status == 200){
+            	console.log("Todo bien");
+            }else if(data.status == 409){
+            	alert("El usuario no existe");
+            }
+        });
+}
+
+function agregarInvitado(t){
+	var json ={
+			tipo:"agregar",
+            board_id: t,
+            user_username: document.getElementById("username").value
+    }
+  
+    let configs = {
+            method: 'post',
+            body: JSON.stringify(json),
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/json'
+            }
+    }
+    fetch('../InvitadosBuscador', configs)
+        .then(res => res.json())
+        .then(data => {console.log(data)
+        	let userData = data.userData;
+            if(data.status == 200){
+            	console.log("Todo bien");
+            }else if(data.status == 409){
+            	alert("El usuario no existe");
+            }
+        });
+}
+
+
+
 

@@ -110,14 +110,8 @@ public class Queries extends BDConexion {
 	
 	//Leer Tablero
 	public ArrayList<JSONObject> LeerTablero(JSONObject user)throws SQLException{
-		this.rs = executeStatement("LeerTablero", user.getInt("user_id"));
+		this.rs = executeStatement("LeerTablero", user.getInt("user_id"), user.getInt("type_board_user_id"));
 		return this.getArray();
-	}
-	
-	//Leer toda la cantidad de los tableros
-	public JSONObject LeerTableros(int a, JSONObject user)throws SQLException{
-		this.rs = executeStatement("LeerTableros", a, user.getInt("user_id"));
-		return this.getData();
 	}
 	
 	//Actualizar Tablero
@@ -236,6 +230,22 @@ public class Queries extends BDConexion {
 	public boolean ActualizarEstado(JSONObject data) throws SQLException{
 		int i = executeUpdate("ActualizarEstado", data.getInt("type_board_user_id"), data .getInt("board_id"));
 		return (i == 1)?true:false;
+	}
+	
+	//----------------------------------Buscar Usuario en el buscador----------------------------------------------
+	public ArrayList<JSONObject> BuscarInformacionUsuario(String username)throws SQLException{
+		this.rs = executeStatement("BuscarInformacionUsuario", username);
+		return this.getArray();
+	}
+	
+	//-----------------------------------Invitado--------------------------------------------------------
+	public boolean AgregarInvitado(JSONObject data) throws SQLException{
+		int i = executeUpdate("AgregarInvitado", data.getInt("board_id"), data.getString("user_username"));
+		return (i == 1)?true:false;
+	}
+	public ArrayList<JSONObject> LeerTableroInvitado(JSONObject user)throws SQLException{
+		this.rs = executeStatement("LeerTableroInvitado", user.getInt("board_id"));
+		return this.getArray();
 	}
 	
 	

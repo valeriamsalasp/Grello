@@ -1,2 +1,3 @@
 
-leerColumna(id);
+leerColumna(Id),
+leerInvitado(Id);

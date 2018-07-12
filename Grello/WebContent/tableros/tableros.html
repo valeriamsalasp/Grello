@@ -5,6 +5,7 @@
         <script src="./js/jquery-3.3.1.min.js"></script>
 		<script src="./js/bootstrap.min.js"> </script>
 		<script src="./js/bootstrap-dropdown.js"> </script>
+		<script src="./js/popper.min.js"> </script>
 		<link rel= "stylesheet" href="./css/bootstrap.min.css"></link>
 		<meta charset= "utf-8">
 		<meta name= "viewport" content="width=device-width, initial-scale=1">
@@ -67,25 +68,27 @@
 			
 			
 			
-	<section class="portfolio" id="TipoTableros">		
+	<section class="Tablero" id="TipoTableros">		
 		<div class="dropdown">
-			Nombre
+		Nombre del tablero
 	  		<button class="btn dropdown-toggle " type="button" id="dropdownMenu1" data-toggle="dropdown" data-hover="dropdown">
 	    		Tipo de tableros
 	   	 		<span class="caret"></span>
 	  		</button>
 	 
-		  <ul class="dropdown-menu" role="menu" id="menu" aria-labelledby="dropdownMenu1">
-		    <li role="presentation">
-		      <a role="menuitem" tabindex="-1" href="#">Privado</a>
-		    </li>
-		    <li role="presentation">
-		      <a role="menuitem" tabindex="-1" href="#">Equipo</a>
-		    </li>
-		    <li role="presentation">
-		      <a role="menuitem" tabindex="-1" href="#">Publico</a>
-		    </li>
-		  </ul>
+			<ul class="dropdown-menu" role="menu" id="menu" aria-labelledby="dropdownMenu1">
+			<li role="presentation">
+			    <a role="menuitem" tabindex="-1" href="#">Privado</a>
+			</li>
+			<li role="presentation">
+				<a role="menuitem" tabindex="-1" href="#">Equipo</a>
+			</li>
+			<li role="presentation">
+				<a role="menuitem" tabindex="-1" href="#">Publico</a>
+			</li>
+			</ul>
+			<button id="agregarInvitado" type="button" onclick="" class="btn add-column"  data-toggle="modal" data-target="#agregarInvitados"><img src="../img/cooperador.png" style="width:30px; height:30px;">
+			</button>
 		</div>
 	</section>
 			
@@ -191,10 +194,35 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- ---------------------------------------------------------Agregar Invitado------------------------------------------------------------- -->
+	<div id="agregarInvitados" class="modal fade">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<form>
+					<div class="modal-header">						
+						<h4 class="modal-title"><center>Agregar Invitado</center></h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">					
+						<div class="form-group">
+							<label>Nombre de Usuario</label>
+							<input type="text" class="form-control"  id="username" required="required" placeholder="Enter name">
+						</div>				
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+						<input type="button"  class="btn btn-success add-new" value="Agregar" onclick="agregarInvitado(`${Id}`)" >
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
 		
 	<script>
-	const id = document.location.search.split("=")[1];
-	console.log(id)
+	var Id = document.location.search.split("=")[1];
+	console.log(Id)
 	
 	/*var card = `
 				<div class="card" draggable="true" ondragstart="drag(event)">
