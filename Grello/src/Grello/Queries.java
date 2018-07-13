@@ -228,9 +228,15 @@ public class Queries extends BDConexion {
 	//--------------------------------------Permisologia------------------------------------------------------------
 	//Permisologia de los tableros
 	public boolean ActualizarEstado(JSONObject data) throws SQLException{
-		int i = executeUpdate("ActualizarEstado", data.getInt("type_board_user_id"), data .getInt("board_id"));
+		int i = executeUpdate("ActualizarEstado", data.getInt("type_board_user_id"), data .getInt("board_id"), data.getInt("user_id"));
 		return (i == 1)?true:false;
 	}
+	public JSONObject LeerEstado(String board, String user) throws SQLException{
+		this.rs= executeStatement("LeerEstado", board, user);
+		//this.rs= executeStatement("LeerEstado", data .getInt("board_id"), data.getInt("user_id"));
+		return this.getData();
+	}
+	
 	
 	//----------------------------------Buscar Usuario en el buscador----------------------------------------------
 	public ArrayList<JSONObject> BuscarInformacionUsuario(String username)throws SQLException{
@@ -246,6 +252,14 @@ public class Queries extends BDConexion {
 	public ArrayList<JSONObject> LeerTableroInvitado(JSONObject user)throws SQLException{
 		this.rs = executeStatement("LeerTableroInvitado", user.getInt("board_id"));
 		return this.getArray();
+	}
+	public boolean ActualizarInvitado(JSONObject data) throws SQLException{
+		int i = executeUpdate("ActualizarInvitado",data.getInt("type_board_user_id"), data.getInt("user_id"), data.getInt("board_id"));
+		return (i == 1)?true:false;
+	}
+	public boolean BorrarInvitado(JSONObject data) throws SQLException{
+		int i = executeUpdate("BorrarInvitado", data.getInt("user_id"));
+		return (i == 1)?true:false;
 	}
 	
 	

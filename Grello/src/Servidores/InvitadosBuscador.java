@@ -119,5 +119,28 @@ public class InvitadosBuscador extends HttpServlet {
 		}
 		
 	}
-
+	
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		PrintWriter out = response.getWriter();
+		JSONObject mensaje = new JSONObject();
+		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
+		Queries db = new Queries();
+		
+		System.out.println("La data es: "+ data);
+		
+		try {
+			System.out.println("Entramos en borrar Invitado");
+			boolean status = db.BorrarInvitado(data);
+			if(status) {
+				mensaje.put("status", 200).put("response", "Fue borrado el invitado");
+			}else {
+				mensaje.put("status", 500).put("response", "No se pudo borrar el invitado");
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			db.closeResources();
+		}
+		out.println(mensaje.toString());	
+	}
 }

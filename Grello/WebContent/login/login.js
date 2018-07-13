@@ -1,4 +1,4 @@
-var userLogin, boardId, columnId, cardId, titulo, ID;
+var userLogin, boardId, columnId, cardId, titulo, ID, idInvitado, tipoInvitado;
 
 function enviar(){
     var json ={
@@ -153,6 +153,14 @@ const goToUpdate = (id) => {
 	ID = id;
 	console.log("Este es: "+ ID);
 	console.log(document.location);
+}
+
+const goToUpdateInvited = (id, tipo) => {
+	idInvitado = id;
+	console.log("ID del invitado: "+ idInvitado);
+	tipoInvitado = tipo;
+	console.log("Tipo de invitado: " + tipoInvitado);
+	modal()
 }
 //------------------------------------------------Leer---------------------------------------------------------------
 function leerTablero(t){
@@ -386,15 +394,17 @@ function leerInvitado(t){
     fetch('../InvitadosBuscador', configs)
         .then(res => res.json())
         .then(data => {console.log(data)
-        	let invitadoData = data.response;
-            if(data.status == 200){
-            	console.log("Todo bien");
-            	for(var i=0; i <invitadoData.leght ; i++){
-	            	var invitado = `
-	    				<div class="card" draggable="true" ondragstart="drag(event)">
-	    				${invitadoData[i].user_username}
-	    				</div>`
-	            		$(invitado).insertBefore($("#agregarInvitado").parent());
+        	let arrayBuscar = data.response;
+        
+			if(data.status == 200){
+				for (var i = 0; i < arrayBuscar.length; i++){
+            		console.log("Nombre del invitado "+i+": "+arrayBuscar[i].user_username );
+	            	var invitado = `	
+	            	<div class="container" ><div class="card-header" style="width:100px;">${arrayBuscar[i].user_username}</div>
+						<a class="delete-column" title="Borrar Invitado" data-toggle="tooltip" onclick="borrarInvitado(${arrayBuscar[i].user_id})"><img src="../img/delete.png" style="width:25px; hight:25px;"></a>
+						<button id="modificar" type="button" onclick="goToUpdateInvited(${arrayBuscar[i].user_id}, ${arrayBuscar[i].type_board_user_id})" class="btn add-column"  data-toggle="modal" data-target="#estadoInvitado"><img src="../img/update.png" style="width:25px; hight:25px;"></button>
+	    			</div>`
+	            		$(invitado).insertAfter($("#aqui").parent());
             	}
             }
         });
@@ -421,6 +431,36 @@ function actualizarTablero(t){
             }
     }
     fetch('../Tableros', configs)
+        .then(res => res.json())
+        .then(data => {console.log(data)
+        	
+    		if(data.status == 200){
+    			
+            }	
+            
+        });	
+	window.location.reload(false);
+}
+
+function actualizarTipoTablero(x, t){
+	userLogin = localStorage.getItem("id");
+	var json ={
+			type_board_user_id:x,
+            user_id: userLogin,
+            board_id: t
+    }
+    
+    
+    let configs = {
+            method: 'post',
+            body: JSON.stringify(json),
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/json'
+            }
+    }
+    fetch('../Permisologia', configs)
         .then(res => res.json())
         .then(data => {console.log(data)
         	
@@ -490,6 +530,10 @@ function actualizarTarjeta(t){
         });	
 	window.location.reload(false);
 }
+
+/*ActualizarInvitado(){
+	
+}*/
 
 //-------------------------------------------------------borrar----------------------------------------------------
 function borrarTablero(t){
@@ -579,10 +623,35 @@ function borrarTarjeta(t){
         	
     		if(data.status == 200){
     			console.log(data[i]);
-                /*localStorage.setItem('columna', JSON.stringify(arrayColumn));
-                localStorage.setItem('columndId', JSON.stringify(arrayColumn.column_id));
-                localStorage.setItem('columnName', JSON.stringify(arrayColumn.column_name))*/
-                
+            }	
+            
+        });	
+	window.location.reload(false);
+}
+
+function borrarInvitado(t){
+	var json ={
+            tipo: "borrar",
+            user_id: t
+    }
+    
+    
+    let configs = {
+            method: 'delete',
+            body: JSON.stringify(json),
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/json'
+            }
+    }
+    fetch('../InvitadosBuscador', configs)
+        .then(res => res.json())
+        .then(data => {console.log(data)
+        	let arrayColumn = data.arrayColumn;
+        	
+    		if(data.status == 200){
+    			console.log(data);
             }	
             
         });	
@@ -638,6 +707,7 @@ function agregarInvitado(t){
         	let userData = data.userData;
             if(data.status == 200){
             	console.log("Todo bien");
+            	window.location.reload(false);
             }else if(data.status == 409){
             	alert("El usuario no existe");
             }

@@ -65,32 +65,24 @@
             </nav>
 			<br>
 			<br>
+			<br>
+			<br>
+			<br>
+			<br>
 			
 			
-			
-	<section class="Tablero" id="TipoTableros">		
-		<div class="dropdown">
-		Nombre del tablero
-	  		<button class="btn dropdown-toggle " type="button" id="dropdownMenu1" data-toggle="dropdown" data-hover="dropdown">
-	    		Tipo de tableros
-	   	 		<span class="caret"></span>
-	  		</button>
-	 
-			<ul class="dropdown-menu" role="menu" id="menu" aria-labelledby="dropdownMenu1">
-			<li role="presentation">
-			    <a role="menuitem" tabindex="-1" href="#">Privado</a>
-			</li>
-			<li role="presentation">
-				<a role="menuitem" tabindex="-1" href="#">Equipo</a>
-			</li>
-			<li role="presentation">
-				<a role="menuitem" tabindex="-1" href="#">Publico</a>
-			</li>
-			</ul>
-			<button id="agregarInvitado" type="button" onclick="" class="btn add-column"  data-toggle="modal" data-target="#agregarInvitados"><img src="../img/cooperador.png" style="width:30px; height:30px;">
-			</button>
-		</div>
-	</section>
+	<div class="container" >
+		<form action="">
+			<div id="aqui">
+				<button type="button" class="btn btn-info" style="background-color: #1b9891;" data-toggle="modal" data-target="#permisologia">Cambiar Tablero</button>
+							
+				<button id="agregarInvitado" type="button" onclick="" class="btn add-column"  data-toggle="modal" data-target="#agregarInvitados"><img src="../img/cooperador.png" style="width:30px; height:30px;">
+				</button>
+			</div>	
+		</form>
+	</div>			
+	
+	
 			
 			
 	<!--  --------------------------------------Agregar Columna------------------------------------------------------ -->
@@ -200,7 +192,7 @@
 		<div class="modal-dialog modal-sm">
 			<div class="modal-content">
 				<form>
-					<div class="modal-header">						
+					<div class="modal-header">					
 						<h4 class="modal-title"><center>Agregar Invitado</center></h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
@@ -218,6 +210,71 @@
 			</div>
 		</div>
 	</div>
+	<!-- ------------------------------------------------Cambiar permisologia------------------------------------------------  -->
+	<div id="permisologia" class="modal fade">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<form>
+					<div class="modal-header">						
+						<h4 class="modal-title"><center>Tipos de tableros</center></h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">					
+						<input type="radio" id="tipo" name="contact" value="privado" checked>
+						<label for="tipo1">Privado</label>
+						<input type="radio" id="tipo" name="contact" value="equipo">
+						<label for="tipo2">Equipo</label>
+						<input type="radio" id="tipo" name="contact" value="publico">
+						<label for="tipo3">Publico</label>			
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+						<input type="button"  class="btn btn-success add-new" value="Cambiar" onclick="agregarInvitado(`${Id}`)" >
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<!-- -----------------------------------------------Cambiar el estado del invitado---------------------------------------------- -->
+	<div id="estadoInvitado" class="modal fade">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<form>
+					<div class="modal-header">						
+						<h4 class="modal-title"><center>Estados de la persona</center></h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body" id="modal">					
+							
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+						<input type="button"  class="btn btn-success add-new" value="Cambiar Estado" onclick="" >
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+<script>
+function modal(){
+	if(tipoInvitado == 4){
+		var c = `
+		<input type="radio" id="tipo" name="contact" value="invitado" checked>
+		<label for="tipo1">Invitado</label>
+		<input type="radio" id="tipo" name="contact" value="administrador">
+		<label for="tipo2">Administrador</label>`
+	}else(tipoInvitado == 5){
+		var c = `
+			<input type="radio" id="tipo" name="contact" value="invitado" >
+			<label for="tipo1">Invitado</label>
+			<input type="radio" id="tipo" name="contact" value="administrador" checked>
+			<label for="tipo2">Administrador</label>`
+	}
+	document.getElementById("modal").innerHTML += c;
+}
+
+</script>	 
 	
 		
 	<script>
