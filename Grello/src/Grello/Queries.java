@@ -114,6 +114,12 @@ public class Queries extends BDConexion {
 		return this.getArray();
 	}
 	
+	//Leer el tipo de tablero
+	public JSONObject LeerTipoTablero (JSONObject user)throws SQLException{
+		this.rs = executeStatement("LeerTipoTablero", user.getInt("board_id"), user.getInt("user_id"));
+		return this.getData();
+	}
+	
 	//Actualizar Tablero
 		public boolean ActualizarTablero(JSONObject data) throws SQLException{
 			int i = executeUpdate("ActualizarTablero", data.getString("board_name"), data .getInt("board_id"));
@@ -149,13 +155,13 @@ public class Queries extends BDConexion {
 	}
 	//Traer la informacion de la columna
 	public JSONObject InformacionColumna (JSONObject user)throws SQLException{
-		this.rs = executeStatement("BuscarColumna", user.getString("column_name"));
+		this.rs = executeStatement("BuscarColumna", user.getString("column_name"),  user.getInt("board_id"));
 		return this.getData();
 	}
 	
 	//Crear Columna 
 	public boolean CrearColumna(JSONObject data) throws SQLException{
-		int i = executeUpdate("CrearColumna", data.getInt("board_id"), data .getString("column_name"));
+		int i = executeUpdate("CrearColumna", data.getInt("board_id"), data .getString("column_name"), data.getInt("user_id"));
 		return (i == 1)?true:false;
 	}
 	//Leer Columna recien ingresada
@@ -228,7 +234,7 @@ public class Queries extends BDConexion {
 	//--------------------------------------Permisologia------------------------------------------------------------
 	//Permisologia de los tableros
 	public boolean ActualizarEstado(JSONObject data) throws SQLException{
-		int i = executeUpdate("ActualizarEstado", data.getInt("type_board_user_id"), data .getInt("board_id"), data.getInt("user_id"));
+		int i = executeUpdate("ActualizarEstado", data.getString("type_board_user_desccription"), data .getInt("board_id"), data.getInt("user_id"));
 		return (i == 1)?true:false;
 	}
 	public JSONObject LeerEstado(String board, String user) throws SQLException{
@@ -254,7 +260,7 @@ public class Queries extends BDConexion {
 		return this.getArray();
 	}
 	public boolean ActualizarInvitado(JSONObject data) throws SQLException{
-		int i = executeUpdate("ActualizarInvitado",data.getInt("type_board_user_id"), data.getInt("user_id"), data.getInt("board_id"));
+		int i = executeUpdate("ActualizarInvitado",data.getString("type_board_user_desccription"), data.getInt("user_id"), data.getInt("board_id"));
 		return (i == 1)?true:false;
 	}
 	public boolean BorrarInvitado(JSONObject data) throws SQLException{

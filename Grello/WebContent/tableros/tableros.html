@@ -4,7 +4,6 @@
   <head>
         <script src="./js/jquery-3.3.1.min.js"></script>
 		<script src="./js/bootstrap.min.js"> </script>
-		<script src="./js/bootstrap-dropdown.js"> </script>
 		<script src="./js/popper.min.js"> </script>
 		<link rel= "stylesheet" href="./css/bootstrap.min.css"></link>
 		<meta charset= "utf-8">
@@ -74,7 +73,7 @@
 	<div class="container" >
 		<form action="">
 			<div id="aqui">
-				<button type="button" class="btn btn-info" style="background-color: #1b9891;" data-toggle="modal" data-target="#permisologia">Cambiar Tablero</button>
+				<button type="button" class="btn btn-info" style="background-color: #1b9891;" data-toggle="modal" data-target="#permisologia" onclick="tipo()">Cambiar Tablero</button>
 							
 				<button id="agregarInvitado" type="button" onclick="" class="btn add-column"  data-toggle="modal" data-target="#agregarInvitados"><img src="../img/cooperador.png" style="width:30px; height:30px;">
 				</button>
@@ -217,19 +216,14 @@
 				<form>
 					<div class="modal-header">						
 						<h4 class="modal-title"><center>Tipos de tableros</center></h4>
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="window.location.reload(false)">&times;</button>
 					</div>
-					<div class="modal-body">					
-						<input type="radio" id="tipo" name="contact" value="privado" checked>
-						<label for="tipo1">Privado</label>
-						<input type="radio" id="tipo" name="contact" value="equipo">
-						<label for="tipo2">Equipo</label>
-						<input type="radio" id="tipo" name="contact" value="publico">
-						<label for="tipo3">Publico</label>			
+					<div class="modal-body" id="tipoT">	
+					
 					</div>
 					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="button"  class="btn btn-success add-new" value="Cambiar" onclick="agregarInvitado(`${Id}`)" >
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" onclick="window.location.reload(false)">
+						<input type="button"  class="btn btn-success add-new" value="Cambiar" onclick="actualizarTipoTablero(`${Id}`)" >
 					</div>
 				</form>
 			</div>
@@ -243,14 +237,14 @@
 				<form>
 					<div class="modal-header">						
 						<h4 class="modal-title"><center>Estados de la persona</center></h4>
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="window.location.reload(false)">&times;</button>
 					</div>
-					<div class="modal-body" id="modal">					
+					<div class="modal-body" id="ponerModal">					
 							
 					</div>
 					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="button"  class="btn btn-success add-new" value="Cambiar Estado" onclick="" >
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" onclick="window.location.reload(false)">
+						<input type="button"  class="btn btn-success add-new" value="Cambiar Estado" id="boton" onclick="actualizarInvitado()" >
 					</div>
 				</form>
 			</div>
@@ -260,20 +254,49 @@
 function modal(){
 	if(tipoInvitado == 4){
 		var c = `
-		<input type="radio" id="tipo" name="contact" value="invitado" checked>
-		<label for="tipo1">Invitado</label>
-		<input type="radio" id="tipo" name="contact" value="administrador">
-		<label for="tipo2">Administrador</label>`
-	}else(tipoInvitado == 5){
+		<input type="radio" id="tipoS" name="estado" value="Invitado" checked >
+		<label for="tipo5">Invitado</label>
+		<input type="radio" id="tipoS" name="estado" value="Admin">
+		<label for="tipo6">Administrador</label>`
+	}else if(tipoInvitado == 5){
 		var c = `
-			<input type="radio" id="tipo" name="contact" value="invitado" >
-			<label for="tipo1">Invitado</label>
-			<input type="radio" id="tipo" name="contact" value="administrador" checked>
-			<label for="tipo2">Administrador</label>`
+			<input type="radio" id="tipoS" name="estado" value="Invitado" >
+			<label for="tipo5">Invitado</label>
+			<input type="radio" id="tipoS" name="estado" value="Admin" checked>
+			<label for="tipo6">Administrador</label>`
 	}
-	document.getElementById("modal").innerHTML += c;
+	document.getElementById("ponerModal").innerHTML += c;
 }
 
+function tipo(){
+	console.log("aqui");
+	var tipoTablero = userLogin = localStorage.getItem("tipoTablero");
+	console.log(tipoTablero);
+	if(tipoTablero == 1){				
+		d=`<input type="radio" id="tipo" name="contact" value="Privado" checked>
+		<label for="tipo1">Privado</label>
+		<input type="radio" id="tipo" name="contact" value="Equipo">
+		<label for="tipo2">Equipo</label>
+		<input type="radio" id="tipo" name="contact" value="Publico">
+		<label for="tipo3">Publico</label>`		
+	}else if(tipoTablero == 2){
+		d=`<input type="radio" id="tipo" name="contact" value="Privado">
+		<label for="tipo1">Privado</label>
+		<input type="radio" id="tipo" name="contact" value="Equipo"checked>
+		<label for="tipo2">Equipo</label>
+		<input type="radio" id="tipo" name="contact" value="Publico">
+		<label for="tipo3">Publico</label>`
+	}else if(tipoTablero == 3){
+		d=`<input type="radio" id="tipo" name="contact" value="Privado">
+		<label for="tipo1">Privado</label>
+		<input type="radio" id="tipo" name="contact" value="Equipo">
+		<label for="tipo2">Equipo</label>
+		<input type="radio" id="tipo" name="contact" value="Publico"checked>
+		<label for="tipo3">Publico</label>`
+	}
+	document.getElementById("tipoT").innerHTML += d;
+	
+}
 </script>	 
 	
 		

@@ -1,3 +1,4 @@
 
 leerColumna(Id),
-leerInvitado(Id);
+leerInvitado(Id),
+leerTipoTablero(Id);

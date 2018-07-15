@@ -73,15 +73,13 @@ function crearTablero(){
 //constructor(localStorage.getItem("nombreTablero"));
 
 function crearColumna(){
-	console.log( "userBoard" + localStorage.getItem("tableros"));
-	
-	
-	
+	userLogin = localStorage.getItem("id")
 	
 	var json ={
             tipo: "crear",
             board_id: Id,
-            column_name: document.getElementById("column_name").value
+            column_name: document.getElementById("column_name").value,
+            user_id: userLogin
     }
     
     
@@ -99,6 +97,7 @@ function crearColumna(){
         .then(data => {console.log(data)
         	let columnData = data.columnData;
             if(data.status == 200){
+            	console.log("Se agrego la columna ")
                 //location.href ="../tableros/tableros.html";
                 localStorage.setItem('columnas', JSON.stringify(columnData));
                 localStorage.setItem('columnId', JSON.stringify(columnData.column_id));
@@ -218,6 +217,41 @@ function leerTablero(t){
 	        });
 	
 	
+}
+
+function leerTipoTablero(t){
+	userLogin = localStorage.getItem("id");
+	var json ={
+            tipo: "leerTipo",
+            board_id: t,
+            user_id: userLogin
+    }
+    
+    
+    let configs = {
+            method: 'post',
+            body: JSON.stringify(json),
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/json'
+            }
+    }
+    fetch('../Tableros', configs)
+        .then(res => res.json())
+        .then(data => {
+        	console.log(data)
+        	let userBoard = data.response;
+        	
+    		if(data.status == 200){
+    			console.log("Se realizo todo");
+    			console.log("userBoard: "+userBoard.type_board_user_id);
+    			localStorage.setItem('tipoTablero', JSON.stringify(userBoard.type_board_user_id))
+    		}	
+        	 
+        });
+
+
 }
 
 function leerTableroOtroUsuario(i, t){
@@ -442,10 +476,10 @@ function actualizarTablero(t){
 	window.location.reload(false);
 }
 
-function actualizarTipoTablero(x, t){
+function actualizarTipoTablero(t){
 	userLogin = localStorage.getItem("id");
 	var json ={
-			type_board_user_id:x,
+			type_board_user_desccription:($('input:radio[name=contact]:checked').val()),
             user_id: userLogin,
             board_id: t
     }
@@ -531,9 +565,36 @@ function actualizarTarjeta(t){
 	window.location.reload(false);
 }
 
-/*ActualizarInvitado(){
-	
-}*/
+function actualizarInvitado(t){
+
+	var json ={
+            tipo: "actualizar",
+            type_board_user_desccription: ($('input:radio[name=estado]:checked').val()),
+            user_id: idInvitado,
+            board_id: Id
+    }
+    
+    
+    let configs = {
+            method: 'post',
+            body: JSON.stringify(json),
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/json'
+            }
+    }
+    fetch('../InvitadosBuscador', configs)
+        .then(res => res.json())
+        .then(data => {console.log(data)
+        	
+    		if(data.status == 200){
+    			
+            }	
+            
+        });	
+	//window.location.reload(false);
+}
 
 //-------------------------------------------------------borrar----------------------------------------------------
 function borrarTablero(t){
@@ -571,9 +632,12 @@ function borrarTablero(t){
 }
 
 function borrarColumna(t){
+	userLogin = localStorage.getItem("id")
 	var json ={
             tipo: "borrar",
-            column_id: t
+            column_id: t,
+            user_id: userLogin, 
+            board_id: Id
     }
     
     

@@ -49,9 +49,9 @@ public class InvitadosBuscador extends HttpServlet {
 				arrayBuscar = db.BuscarInformacionUsuario(username);
 				if(!arrayBuscar.isEmpty()) {
 					mensaje.put("status", 200).put("response", arrayBuscar);
-					System.out.println("Todo bein hay datos que devolver");
+					System.out.println("Todo bien hay datos que devolver");
 				}else {
-					mensaje.put("status", 500).put("response", arrayBuscar);
+					mensaje.put("status", 200).put("response", arrayBuscar);
 					System.out.println("No hay datos que devolver");
 				}
 			}else {
@@ -79,6 +79,7 @@ public class InvitadosBuscador extends HttpServlet {
 		String a = data.getString("tipo").toString();
 		System.out.println("La data es: "+ data);
 		
+	
 		if("agregar".equals(a)) {
 		try {
 			if(db.VerificarUsuario(data.getString("user_username"))) {
@@ -97,7 +98,7 @@ public class InvitadosBuscador extends HttpServlet {
 		} finally {
 			db.closeResources();
 		}
-		out.println(mensaje.toString());
+		
 		}else if("leer".equals(a)) {
 			try {
 				System.out.println("comenzamos con leer los invitados");
@@ -114,9 +115,27 @@ public class InvitadosBuscador extends HttpServlet {
 			} finally {
 				db.closeResources();
 			}
-			out.println(mensaje.toString());
+			
+			
+		}else if("actualizar".equals(a)){
+			try {
+				System.out.println("comenzamos actualizar el estado de los invitados");
+				boolean status= db.ActualizarInvitado(data);
+				if(status) {
+					mensaje.put("status", 200).put("response", "Se actualizo el estado");
+					System.out.println("Todo bien se actualizo el estado");
+				}else {
+					mensaje.put("status", 500).put("response", "No se puedo actualizar el estado");
+					System.out.println("No se actualizo el estado");
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				db.closeResources();
+			}
 			
 		}
+		out.println(mensaje.toString());
 		
 	}
 	

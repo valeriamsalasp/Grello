@@ -138,12 +138,14 @@ public class Tableros extends HttpServlet {
 				e.printStackTrace();
 			}
 			
-		}else if("permisologia".equals(a)) {
+		}else if("leerTipo".equals(a)) {
 			try {
-				boolean status = db.ActualizarEstado(data);
+			userBoard = db.LeerTipoTablero(data);
 				if(userBoard.length() > 0) {
-					mensaje.put("status", 200).put("response", status);
-					System.out.println("Se realizao la actualizacion de estado del tablero");
+					mensaje.put("status", 200).put("response", userBoard);
+					System.out.println("Se realizo la lectura del tipo de tablero");
+				}else {
+					mensaje.put("status", 200).put("response", "No se pudo realizar la lectura del tipo de tablero");
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
