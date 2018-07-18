@@ -161,6 +161,10 @@ const goToUpdateInvited = (id, tipo) => {
 	console.log("Tipo de invitado: " + tipoInvitado);
 	modal()
 }
+
+const goToBuscador = (id) =>{
+	document.location.replace(`http://localhost:8080/Grello/buscador/index.html?id=${id}`)
+}
 //------------------------------------------------Leer---------------------------------------------------------------
 function leerTablero(){
 		userLogin = localStorage.getItem("id");
@@ -251,7 +255,7 @@ function leerTipoTablero(t){
 
 }
 
-function leerTableroOtroUsuario(i, t){
+/*function leerTableroOtroUsuario(i, t){
 	var json ={
             tipo: "leer",
             user_id: i,
@@ -296,14 +300,14 @@ function leerTableroOtroUsuario(i, t){
 	        			</div>`;
     	        	document.getElementById("boards").innerHTML += container; 
     	        	
-	                /*localStorage.setItem('tableros', JSON.stringify(boardData));
-	                localStorage.setItem('boardId', JSON.stringify(boardData));
-	                localStorage.setItem('boardName', JSON.stringify(boardData.board_name))*/
+	                //localStorage.setItem('tableros', JSON.stringify(boardData));
+	                //localStorage.setItem('boardId', JSON.stringify(boardData));
+	                //localStorage.setItem('boardName', JSON.stringify(boardData.board_name))
     			}	
     		}	
         	 
         });
-}
+}*/
 
 
 
@@ -399,6 +403,89 @@ function leerTarjeta(t, x){
         				</div>
         			`
         				$(card).insertBefore($("#cardButton"+x));
+    			}	
+    		}	
+        	 
+        });
+
+	
+}
+
+function leerColumnaBuscador(id){
+	
+	var json ={
+            tipo: "leer",
+            board_id: id
+    }
+    
+    
+    let configs = {
+            method: 'post',
+            body: JSON.stringify(json),
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/json'
+            }
+    }
+    fetch('../Columna', configs)
+        .then(res => res.json())
+        .then(data => {
+        	console.log(data)
+        	let arrayColumn = data.response;
+        	
+    		if(data.status == 200){
+    			for (var i = 0; i < arrayColumn.length; i++){
+	    			console.log("column_id "+i+": "+arrayColumn[i].column_id);
+	    			leerTarjetaBuscador(arrayColumn[i].column_id, i);
+	    			var column=`
+	    				<div class="column" ondrop="drop(event)" ondragover="allowDrop(event)">
+							<div class="column-header" ><input id="header${i}" type="text" class="form-control" value="${arrayColumn[i].column_name}"/>
+								</div>
+		    				</div>
+		    			`
+	    				$(column).insertBefore($("#card-crear").parent());
+    			}	
+    		}
+        });	
+
+}
+
+function leerTarjetaBuscador(t, x){
+	var json ={
+            tipo: "leer",
+            column_id: t
+    }
+    
+    
+    let configs = {
+            method: 'post',
+            body: JSON.stringify(json),
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/json'
+            }
+    }
+    fetch('../Tarjetas', configs)
+        .then(res => res.json())
+        .then(data => {
+        	console.log(data)
+        	let arrayCard = data.response;
+        	
+    		if(data.status == 200){
+    			for (var i = 0; i < arrayCard.length; i++){
+        			console.log("board id "+i+": "+arrayCard[i].card_id);	
+        			var card = `
+        				<div class="card" draggable="true" ondragstart="drag(event)">
+        				<div class="card-header"> <input type="text" id="c-header" class="form-control" value="${arrayCard[i].card_name}" placeholder="Titulo"/></div>
+        					<div class="card-body">
+        						<textarea id="card-a" class="form-control" type="text" name="card" placeholder="Escriba algo aqui" >${arrayCard[i].card_description}</textarea>
+        						<a class="edit-card" title="Editar" data-toggle="tooltip" onclick="habilitarN(this);"></a>
+        					</div>
+        				</div>
+        			`
+        				$(card).insertAfter($("#header"+x));
     			}	
     		}	
         	 
@@ -767,14 +854,14 @@ function buscar(){
         //.then(res => res.json())
         .then(data => {console.log(data)
         	let arrayBuscar = data.response;
-            if(data.status == 200){
+            if(data.status == 200){console.log(data);
             	console.log("Todo bien");
-            	//document.location.replace(`http://localhost:8080/Grello/buscador/index.html`)
+            	//document.location.replace(`http://localhost:8080/Grello/buscador/index.html`);
             	for (var i = 0; i < arrayBuscar.length; i++){
             		console.log("board id "+i+": "+arrayBuscar[i].board_id);	        			
             		let container = `
-            			<div class="col-md-4" style="padding-bottom:10px">
-            				<div onclick="" onclass="card w-40" style="width: inherit; margin-top:auto;">
+            			<div class="col-md-4" style=" width: 250px">
+            				<div onclick="goToBuscador(${arrayBuscar[i].board_id})" onclass="card w-40" style="width: inherit; margin-top:auto;">
                 				<div class="card-header text-center"> 
             						<br>
             						${arrayBuscar[i].board_name}
