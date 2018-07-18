@@ -173,7 +173,7 @@ function leerTablero(){
 	            user_id: userLogin
 	    }
 	    
-	    
+		//var url = '../Tableros?user_id='+userLogin+'tipo='+1;
 	    let configs = {
 	            method: 'post',
 	            body: JSON.stringify(json),
@@ -851,12 +851,10 @@ function buscar(){
 
     fetch(url, configs)
     	.then( r => r.json() )
-        //.then(res => res.json())
         .then(data => {console.log(data)
         	let arrayBuscar = data.response;
             if(data.status == 200){console.log(data);
             	console.log("Todo bien");
-            	//document.location.replace(`http://localhost:8080/Grello/buscador/index.html`);
             	for (var i = 0; i < arrayBuscar.length; i++){
             		console.log("board id "+i+": "+arrayBuscar[i].board_id);	        			
             		let container = `

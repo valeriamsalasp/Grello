@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class BDConexion {
+public class BDConexion extends LeerProperties{
 	public PreparedStatement stmt;
 	public Connection con;
 	public ResultSet rs;

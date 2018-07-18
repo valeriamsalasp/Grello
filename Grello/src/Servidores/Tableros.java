@@ -35,8 +35,51 @@ public class Tableros extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		PrintWriter out = response.getWriter();
+		JSONObject mensaje = new JSONObject();
+		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
+		Queries db = new Queries();
+		JSONObject userBoard = new JSONObject();
+		ArrayList<JSONObject> dataBoard = new ArrayList<JSONObject>();
+		
+		//String id = (request.getParameter("id"));
+		
+		int a = data.getInt("tipo");
+		System.out.println(data);
+		System.out.println("a: "+a);
+		
+		 if(a == 1) {
+				try {
+					System.out.println("Comenzamos con la lectura");
+					dataBoard = db.LeerTablero(data);
+					if(!dataBoard.isEmpty()) {
+						mensaje.put("status", 200).put("response", dataBoard);
+						System.out.println("Se ha realizado la lectura del tablero");
+						System.out.println(dataBoard);
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}else if("leerTipo".equals(a)) {
+				try {
+				userBoard = db.LeerTipoTablero(data);
+					if(userBoard.length() > 0) {
+						mensaje.put("status", 200).put("response", userBoard);
+						System.out.println("Se realizo la lectura del tipo de tablero");
+					}else {
+						mensaje.put("status", 200).put("response", "No se pudo realizar la lectura del tipo de tablero");
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			out.println(mensaje.toString());
+
+		
 	}
 
 	/**
