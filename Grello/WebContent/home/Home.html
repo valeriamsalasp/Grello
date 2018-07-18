@@ -48,7 +48,7 @@
                 		<input class="form-control " id="buscador" type="text" placeholder="Ingrese su busqueda" style="margin-top:5%; margin-left:-80%"required="required" data-validation-required-message="Ingrese su busqueda">
                 	</li>
                 	<li class="nav-item mx-0 mx-lg-1">
-                  		<button id="buscadorBoton" type="button" onclick="buscar()" class="btn btn-info add-new" style="margin-top:25%; margin-left:-370%; background-color: #1b9891;" data-toggle="modal" ><img src="../img/buscador.png" style="width:20px; height:20px;">
+                  		<button id="buscadorBoton" type="button" onclick="buscar()" class="btn btn-info add-new" style="margin-top:25%; margin-left:-370%; background-color: #1b9891;" data-toggle="modal" data-target="#buscar"><img src="../img/buscador.png" style="width:20px; height:20px;">
 						</button>
 					</li>
                     <li class="nav-item mx-0 mx-lg-1">
@@ -81,29 +81,26 @@
             
             <!-- -------------------------------------------Agregar Tablero--------------------------------------------- -->
             <section class="portfolio" id="BoardSection">
-              <div class="container" id="Tableros">
-                <h2 class="text-center text-uppercase text-secondary mb-0">Tableros</h2>
-                <hr class="star-dark mb-5">
-                
- 				<div id="boards" class="row content">
-					<div class="col-md-4">
-						<div class="card w-40" style="width: inherit; margin-top:auto;">
-							<div class="card-header text-center"> 
-							
-								<button id="crear" type="button" onclick="" class="btn btn-info add-new" style="background-color: #1b9891;" data-toggle="modal" data-target="#create"><img src="../img/plus.png" style="width:30px; hight:30px;" >
-									Agregar Tablero
-								</button> 
-							
-								<div class="card-body"></div>
-								<br>
-							</div>
-						</div>	
+	           <div class="container" id="Tableros">
+	                <h2 class="text-center text-uppercase text-secondary mb-0">Tableros</h2>
+	                <hr class="star-dark mb-5">
+	                
+	 				<div id="boards" class="row content">
+						<div class="col-md-4">
+							<div class="card w-40" style="width: inherit; margin-top:auto;">
+								<div class="card-header text-center"> 
+								
+									<button id="crear" type="button" onclick="" class="btn btn-info add-new" style="background-color: #1b9891;" data-toggle="modal" data-target="#create"><img src="../img/plus.png" style="width:30px; hight:30px;" >
+										Agregar Tablero
+									</button> 
+								
+									<div class="card-body"></div>
+									<br>
+								</div>
+							</div>	
+						</div>
 					</div>
 				</div>
-			</div>
-			
-				
-			
             </section>
             
             <!-- -------------------------------------Crear Tablero------------------------------------------------ -->
@@ -155,6 +152,25 @@
 					</div>
 				</div>
 			</div>
+			
+			<!-- -------------------------------------------------Buscardor--------------------------------------------------- -->
+			<div id="buscar" class="modal fade">
+				<div class="modal-dialog modal-sm">
+					<div class="modal-content">
+						<form>
+							<div class="modal-header">						
+								<h4 class="modal-title"><center>Busqueda</center></h4>
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="window.location.reload(false)">&times;</button>
+							</div>
+							<div class="modal-body">					
+								<div class="form-group" id="board">
+								</div>				
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			
         
             
         
@@ -182,9 +198,8 @@
 			<script src="../login/login.js"></script>
 			<script src="../home/home.js"></script>
 			<script>
-			leerTablero(1);
-			leerTablero(2);
-			leerTablero(3);
+			leerTablero();
+			
 			
 				
 			</script>

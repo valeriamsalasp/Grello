@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.*;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Queries extends BDConexion {
@@ -110,13 +111,13 @@ public class Queries extends BDConexion {
 	
 	//Leer Tablero
 	public ArrayList<JSONObject> LeerTablero(JSONObject user)throws SQLException{
-		this.rs = executeStatement("LeerTablero", user.getInt("user_id"), user.getInt("type_board_user_id"));
+		this.rs = executeStatement("LeerTablero", user.getInt("user_id"));
 		return this.getArray();
 	}
 	
-	//Leer el tipo de tablero
+	//Leer el tipo de tablero si es privado publico o en equipo
 	public JSONObject LeerTipoTablero (JSONObject user)throws SQLException{
-		this.rs = executeStatement("LeerTipoTablero", user.getInt("board_id"), user.getInt("user_id"));
+		this.rs = executeStatement("LeerTipoTablero", user.getInt("board_id"));
 		return this.getData();
 	}
 	
@@ -141,7 +142,7 @@ public class Queries extends BDConexion {
 		return (i == 1)?true:false;
 	}
 	public boolean BorrarUsuTa(JSONObject data) throws SQLException{
-		int i = executeUpdate("BorrarUsuTa", data.getInt("board_id"));
+		int i = executeUpdate("BorrarUsuTa", data.getInt("board_id"), data.getInt("id"));
 		return (i == 1)?true:false;
 	}
 	
@@ -175,6 +176,13 @@ public class Queries extends BDConexion {
 		this.rs = executeStatement("LeerColumnaTablero", user.getInt("board_id"));
 		return this.getArray();
 	}
+	
+	//Leer Columna para saber quien la creo
+	public JSONObject LeerColumnaEspecifica (JSONObject data)throws SQLException{
+		this.rs = executeStatement("LeerColumnaEspecifica", data.getInt("column_id"));
+		return this.getData();
+	}
+	
 	
 	//Actualizar Columna 
 	public boolean ActualizarColumna(JSONObject data) throws SQLException{
@@ -217,6 +225,12 @@ public class Queries extends BDConexion {
 		return this.getArray();
 	}
 	
+	//Leer Columna para saber quien la creo
+		public JSONObject LeerTarjetaEspecifica (JSONObject data)throws SQLException{
+			this.rs = executeStatement("LeerTarjetaEspecifica", data.getInt("card_id"));
+			return this.getData();
+		}
+	
 	//Actualizar Tarjeta
 	public boolean ActualizarTarjeta(JSONObject data) throws SQLException{
 		int i = executeUpdate("ActualizarTarjeta", data.getString("card_name"), data.getString("card_description"),data .getInt("card_id"));
@@ -234,13 +248,14 @@ public class Queries extends BDConexion {
 	//--------------------------------------Permisologia------------------------------------------------------------
 	//Permisologia de los tableros
 	public boolean ActualizarEstado(JSONObject data) throws SQLException{
-		int i = executeUpdate("ActualizarEstado", data.getString("type_board_user_desccription"), data .getInt("board_id"), data.getInt("user_id"));
+		int i = executeUpdate("ActualizarEstado", data.getString("type_board_user_desccription"), data .getInt("board_id"));
 		return (i == 1)?true:false;
 	}
-	public JSONObject LeerEstado(String board, String user) throws SQLException{
-		this.rs= executeStatement("LeerEstado", board, user);
-		//this.rs= executeStatement("LeerEstado", data .getInt("board_id"), data.getInt("user_id"));
-		return this.getData();
+	
+	//lee el estado del usuario en el tablero si es admin o invitado
+	public boolean LeerEstado(JSONObject data) throws SQLException{
+		this.rs= executeStatement("LeerEstado", data.getInt("id"),data .getInt("board_id"));
+		return this.rs.next();
 	}
 	
 	
@@ -266,6 +281,21 @@ public class Queries extends BDConexion {
 	public boolean BorrarInvitado(JSONObject data) throws SQLException{
 		int i = executeUpdate("BorrarInvitado", data.getInt("user_id"));
 		return (i == 1)?true:false;
+	}
+	
+	public ArrayList <JSONObject> LeerAdmin(JSONObject data) throws SQLException{
+		this.rs = executeStatement("LeerAdmin", data.getInt("board_id"));
+		return this.getArray();
+	}
+	
+	public ArrayList <JSONObject> LeerPersonaAdmin(JSONObject data) throws SQLException{
+		this.rs = executeStatement("LeerPersonaAdmin", data.getInt("id"), data.getInt("board_id"));
+		return this.getArray();
+	}
+	
+	public ArrayList <JSONObject> LeerUsuario(JSONObject data) throws SQLException{
+		this.rs = executeStatement("LeerUsuario", data.getInt("board_id"));
+		return this.getArray();
 	}
 	
 	

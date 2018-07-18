@@ -162,12 +162,11 @@ const goToUpdateInvited = (id, tipo) => {
 	modal()
 }
 //------------------------------------------------Leer---------------------------------------------------------------
-function leerTablero(t){
+function leerTablero(){
 		userLogin = localStorage.getItem("id");
 		var json ={
 	            tipo: "leer",
-	            user_id: userLogin,
-	            type_board_user_id:t
+	            user_id: userLogin
 	    }
 	    
 	    
@@ -220,11 +219,9 @@ function leerTablero(t){
 }
 
 function leerTipoTablero(t){
-	userLogin = localStorage.getItem("id");
 	var json ={
             tipo: "leerTipo",
-            board_id: t,
-            user_id: userLogin
+            board_id: t
     }
     
     
@@ -246,7 +243,7 @@ function leerTipoTablero(t){
     		if(data.status == 200){
     			console.log("Se realizo todo");
     			console.log("userBoard: "+userBoard.type_board_user_id);
-    			localStorage.setItem('tipoTablero', JSON.stringify(userBoard.type_board_user_id))
+    			localStorage.setItem('tipoTablero', JSON.stringify(userBoard.type_board_id))
     		}	
         	 
         });
@@ -448,10 +445,12 @@ function leerInvitado(t){
 
 //----------------------------------------------------actualizar-----------------------------------------------
 function actualizarTablero(t){
+	userLogin = localStorage.getItem("id");
 	var json ={
             tipo: "actualizar",
             board_name: document.getElementById("cardNameUpdate").value,
-            board_id: t
+            board_id: t,
+            id: userLogin
     }
     
     
@@ -480,8 +479,8 @@ function actualizarTipoTablero(t){
 	userLogin = localStorage.getItem("id");
 	var json ={
 			type_board_user_desccription:($('input:radio[name=contact]:checked').val()),
-            user_id: userLogin,
-            board_id: t
+            board_id: t,
+            id: userLogin 
     }
     
     
@@ -499,18 +498,23 @@ function actualizarTipoTablero(t){
         .then(data => {console.log(data)
         	
     		if(data.status == 200){
-    			
-            }	
+    			window.location.reload(false);
+            }else if(data.status == 409){
+            	alert("Solo los administradores pueden cambiar el tipo de tablero");
+            }
             
         });	
-	window.location.reload(false);
+	
 }
 
 function actualizarColumna(t){
+	userLogin = localStorage.getItem("id");
 	var json ={
             tipo: "actualizar",
             column_name: document.getElementById("columnNameUpdate").value,
-            column_id: t
+            column_id: t,
+            id: userLogin,
+            board_id: Id
     }
     
     
@@ -528,19 +532,24 @@ function actualizarColumna(t){
         .then(data => {console.log(data)
         	
     		if(data.status == 200){
-    			
+    			window.location.reload(false);
+            }else{
+            	alert("Solo es un invitado, no puede modificar columnas a menos que las creara usted");
             }	
             
         });	
-	window.location.reload(false);
+	
 }
 
 function actualizarTarjeta(t){
+	userLogin = localStorage.getItem("id");
 	var json ={
             tipo: "actualizar",
             card_name: document.getElementById("cardNameUpdate").value,
             card_description: document.getElementById("cardDescriptionUpdate").value,
-            card_id: t
+            card_id: t,
+            id:userLogin,
+            board_id: Id  
     }
     
     
@@ -558,20 +567,22 @@ function actualizarTarjeta(t){
         .then(data => {console.log(data)
         	
     		if(data.status == 200){
-    			
-            }	
+    			window.location.reload(false);
+            }else if(data.status == 409){
+            	alert("Solo es un invitado, no puede modificar una tarjeta a menos que la cree usted");
+            }
             
         });	
-	window.location.reload(false);
 }
 
 function actualizarInvitado(t){
-
+	userLogin = localStorage.getItem("id");
 	var json ={
             tipo: "actualizar",
             type_board_user_desccription: ($('input:radio[name=estado]:checked').val()),
             user_id: idInvitado,
-            board_id: Id
+            board_id: Id,
+            id: userLogin
     }
     
     
@@ -589,24 +600,30 @@ function actualizarInvitado(t){
         .then(data => {console.log(data)
         	
     		if(data.status == 200){
-    			
-            }	
+    			window.location.reload(false);
+            }else if(data.status == 409){
+            	alert("No hay mas administradores");
+            	window.location.reload(false);
+            }else if(data.status == 408){
+            	alert("Solo los administradores pueden cambiar el estado");
+            	window.location.reload(false);
+            }
             
         });	
-	//window.location.reload(false);
 }
 
 //-------------------------------------------------------borrar----------------------------------------------------
 function borrarTablero(t){
+	userLogin = localStorage.getItem("id");
 	boardId = t;
 	var json ={
-            tipo: "borrar",
-            board_id: boardId
+            board_id: boardId,
+            id: userLogin
     }
     
     
     let configs = {
-            method: 'post',
+            method: 'delete',
             body: JSON.stringify(json),
             withCredentials: true,
             credentials: 'include',
@@ -620,29 +637,30 @@ function borrarTablero(t){
         	let arrayColumn = data.arrayColumn;
         	
     		if(data.status == 200){
-    			console.log(data[i]);
-                localStorage.setItem('columna', JSON.stringify(arrayColumn));
+                /*localStorage.setItem('columna', JSON.stringify(arrayColumn));
                 localStorage.setItem('columndId', JSON.stringify(arrayColumn.column_id));
-                localStorage.setItem('columnName', JSON.stringify(arrayColumn.column_name))
-            }	
+                localStorage.setItem('columnName', JSON.stringify(arrayColumn.column_name));*/
+            }else if(data.status == 409){
+            	alert("Debe quedar un administrador");
+            }else if(data.status == 500){
+            	
+            }
+    		window.location.reload(false);
             
         });	
-	window.location.reload(false);
-	
 }
 
 function borrarColumna(t){
 	userLogin = localStorage.getItem("id")
 	var json ={
-            tipo: "borrar",
             column_id: t,
-            user_id: userLogin, 
-            board_id: Id
+            board_id: Id,
+            id: userLogin
     }
     
     
     let configs = {
-            method: 'post',
+            method: 'delete',
             body: JSON.stringify(json),
             withCredentials: true,
             credentials: 'include',
@@ -657,22 +675,27 @@ function borrarColumna(t){
         	
     		if(data.status == 200){
     			console.log(data);
+    			window.location.reload(false);
+            }else if(data.status == 409){
+            	alert("Solo es un invitado, no puede borrar columnas a menos que las creara usted");
             }	
             
         });	
-	window.location.reload(false);
+	
 }
 
 function borrarTarjeta(t){
 	boardId = localStorage.getItem("columnId");
+	userLogin = localStorage.getItem("id");
 	var json ={
-            tipo: "borrar",
-            card_id: t
+            card_id: t,
+            id: userLogin, 
+            board_id: Id
     }
     
     
     let configs = {
-            method: 'post',
+            method: 'delete',
             body: JSON.stringify(json),
             withCredentials: true,
             credentials: 'include',
@@ -686,17 +709,20 @@ function borrarTarjeta(t){
         	let arrayColumn = data.arrayColumn;
         	
     		if(data.status == 200){
-    			console.log(data[i]);
+    			window.location.reload(false);
+            }else if(data.status == 409){
+            	alert("Solo es un invitado, no puede borrar una tarjeta a menos que la cree usted");
             }	
             
         });	
-	window.location.reload(false);
 }
 
 function borrarInvitado(t){
+	userLogin = localStorage.getItem("id");
 	var json ={
             tipo: "borrar",
-            user_id: t
+            user_id: t,
+            id: userLogin
     }
     
     
@@ -740,20 +766,43 @@ function buscar(){
     	.then( r => r.json() )
         //.then(res => res.json())
         .then(data => {console.log(data)
-        	let userData = data.userData;
+        	let arrayBuscar = data.response;
             if(data.status == 200){
             	console.log("Todo bien");
+            	//document.location.replace(`http://localhost:8080/Grello/buscador/index.html`)
+            	for (var i = 0; i < arrayBuscar.length; i++){
+            		console.log("board id "+i+": "+arrayBuscar[i].board_id);	        			
+            		let container = `
+            			<div class="col-md-4" style="padding-bottom:10px">
+            				<div onclick="" onclass="card w-40" style="width: inherit; margin-top:auto;">
+                				<div class="card-header text-center"> 
+            						<br>
+            						${arrayBuscar[i].board_name}
+            						<div class="card-body"></div>
+            						<br>
+            					</div>
+            				</div>	
+            			</div>`;
+            		console.log("aqui");
+                	document.getElementById("board").innerHTML += container; 
+
+            	}
+            	localStorage.setItem('datos', JSON.stringify(arrayBuscar));
             }else if(data.status == 409){
             	alert("El usuario no existe");
             }
         });
 }
 
+
+
 function agregarInvitado(t){
+	userLogin = localStorage.getItem("id");
 	var json ={
 			tipo:"agregar",
             board_id: t,
-            user_username: document.getElementById("username").value
+            user_username: document.getElementById("username").value,
+            id: userLogin
     }
   
     let configs = {

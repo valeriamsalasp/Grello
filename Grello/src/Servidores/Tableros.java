@@ -49,6 +49,7 @@ public class Tableros extends HttpServlet {
 		Queries db = new Queries();
 		JSONObject userBoard = new JSONObject();
 		ArrayList<JSONObject> dataBoard = new ArrayList<JSONObject>();
+		ArrayList<JSONObject> admin = new ArrayList<JSONObject>();
 	
 		
 		String a = data.getString("tipo").toString();
@@ -105,24 +106,7 @@ public class Tableros extends HttpServlet {
 			}
 			
 		}else if("borrar".equals(a)) {
-			System.out.println("Entramos en borrar Tablero");
-			try {
-				boolean tabla = db.BorrarUsuTa(data);
-				System.out.println("Fue borrado el tablero de la tabla user_board");
-				if(tabla) {
-					boolean status = db.BorrarTablero(data);
-					if (status) {
-						mensaje.put("status", 200).put("response", "El tablero fue borrado");
-						System.out.println("El tablero fue borrado de la tabla board");
-					}else {
-						mensaje.put("status", 500).put("response","No se puedo bora");
-					}
-				}
-			}catch(SQLException e) {
-				e.printStackTrace();
-			} finally {
-				db.closeResources();
-			}
+			
 			
 		}else if("leer".equals(a)) {
 			try {
@@ -155,6 +139,89 @@ public class Tableros extends HttpServlet {
 		
 		out.println(mensaje.toString());
 		
+	}
+	
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		PrintWriter out = response.getWriter();
+		JSONObject mensaje = new JSONObject();
+		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
+		Queries db = new Queries();
+		JSONObject userBoard = new JSONObject();
+		ArrayList<JSONObject> dataBoard = new ArrayList<JSONObject>();
+		ArrayList<JSONObject> admin = new ArrayList<JSONObject>();
+		
+			
+		System.out.println("Entramos en borrar Tablero");
+		try {
+			dataBoard = db.LeerUsuario(data);
+			System.out.println("Esto" +dataBoard);
+			if(dataBoard.size() == 1){
+				System.out.println("Opcion 1");
+				boolean tabla = db.BorrarUsuTa(data);
+				if(tabla) {
+					System.out.println("Fue borrado el tablero de la tabla user_board");
+					boolean status = db.BorrarTablero(data);
+					if (status) {
+						mensaje.put("status", 200).put("response", "El tablero fue borrado");
+						System.out.println("El tablero fue borrado de la tabla board");
+					}else {
+						mensaje.put("status", 500).put("response","No se puedo borrar");
+					}
+				}else {
+					mensaje.put("status", 500).put("response","No se puedo borrar el tablero de la tabla user_board");
+					System.out.println("No fue borrado el tablero de la tabla user_board");
+				}
+			}else{
+				System.out.println("Opcion 2");
+				if(db.LeerEstado(data)) {
+					System.out.println("Opcion Admin");
+					
+					int i = - dataBoard.size()+ db.LeerAdmin(data).size() ;
+					System.out.println("i: "+ i);
+					if(i > 1) {
+						System.out.println("Mas de un  Admin: ");
+						boolean tabla = db.BorrarUsuTa(data);
+						if(tabla) {
+							System.out.println("Fue borrado el tablero de la tabla user_board");
+							boolean status = db.BorrarTablero(data);
+							if (status) {
+								mensaje.put("status", 200).put("response", "El tablero fue borrado");
+								System.out.println("El tablero fue borrado de la tabla board");
+							}else {
+								System.out.println("No se pudo borrar de la tabla boards");
+								mensaje.put("status", 500).put("response","No se pudo borrar de la tabla boards");
+							}
+						}else {
+							System.out.println("No fue borrado el tablero de la tabla user_board");
+						}
+					}else {
+						mensaje.put("status", 409).put("response","Debe quedar un administrador");
+					}
+				}else {
+					System.out.println("Opcion Invitado");
+					boolean tabla = db.BorrarUsuTa(data);
+					if(tabla) {
+						System.out.println("Fue borrado el tablero de la tabla user_board");
+						boolean status = db.BorrarTablero(data);
+						if (status) {
+							mensaje.put("status", 200).put("response", "El tablero fue borrado");
+							System.out.println("El tablero fue borrado de la tabla board");
+						}else {
+							mensaje.put("status", 500).put("response","No se puedo borrar");
+						}
+					}else {
+						mensaje.put("status", 500).put("response","No se puedo borrar el tablero de la tabla boards");
+						System.out.println("No fue borrado el tablero de la tabla user_board");
+					}
+				}
+			}
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			db.closeResources();
+		}
+		out.println(mensaje.toString());
 	}
 
 }

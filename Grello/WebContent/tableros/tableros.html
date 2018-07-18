@@ -252,13 +252,13 @@
 	</div>
 <script>
 function modal(){
-	if(tipoInvitado == 4){
+	if(tipoInvitado == 2){
 		var c = `
 		<input type="radio" id="tipoS" name="estado" value="Invitado" checked >
 		<label for="tipo5">Invitado</label>
 		<input type="radio" id="tipoS" name="estado" value="Admin">
 		<label for="tipo6">Administrador</label>`
-	}else if(tipoInvitado == 5){
+	}else if(tipoInvitado == 1){
 		var c = `
 			<input type="radio" id="tipoS" name="estado" value="Invitado" >
 			<label for="tipo5">Invitado</label>
@@ -270,24 +270,24 @@ function modal(){
 
 function tipo(){
 	console.log("aqui");
-	var tipoTablero = userLogin = localStorage.getItem("tipoTablero");
+	var tipoTablero =  localStorage.getItem("tipoTablero");
 	console.log(tipoTablero);
 	if(tipoTablero == 1){				
-		d=`<input type="radio" id="tipo" name="contact" value="Privado" checked>
+		var d=`<input type="radio" id="tipo" name="contact" value="Privado" checked>
 		<label for="tipo1">Privado</label>
 		<input type="radio" id="tipo" name="contact" value="Equipo">
 		<label for="tipo2">Equipo</label>
 		<input type="radio" id="tipo" name="contact" value="Publico">
 		<label for="tipo3">Publico</label>`		
 	}else if(tipoTablero == 2){
-		d=`<input type="radio" id="tipo" name="contact" value="Privado">
+		var d=`<input type="radio" id="tipo" name="contact" value="Privado">
 		<label for="tipo1">Privado</label>
 		<input type="radio" id="tipo" name="contact" value="Equipo"checked>
 		<label for="tipo2">Equipo</label>
 		<input type="radio" id="tipo" name="contact" value="Publico">
 		<label for="tipo3">Publico</label>`
 	}else if(tipoTablero == 3){
-		d=`<input type="radio" id="tipo" name="contact" value="Privado">
+		var d=`<input type="radio" id="tipo" name="contact" value="Privado">
 		<label for="tipo1">Privado</label>
 		<input type="radio" id="tipo" name="contact" value="Equipo">
 		<label for="tipo2">Equipo</label>

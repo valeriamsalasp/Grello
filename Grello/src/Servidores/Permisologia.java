@@ -47,15 +47,21 @@ public class Permisologia extends HttpServlet {
 		JSONObject mensaje = new JSONObject();
 		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 		Queries db = new Queries();
+		ArrayList <JSONObject> arrayPermisologia = new ArrayList<JSONObject>();
 		
 		System.out.println("La data es: "+ data);
 	
 		try {
-			boolean status = db.ActualizarEstado(data);
-			if(status) {
-					mensaje.put("status", 200).put("response", "Fue cambiada la permisologia");
+			arrayPermisologia = db.LeerPersonaAdmin(data);
+			if(arrayPermisologia.size() == 1) {
+				boolean status = db.ActualizarEstado(data);
+				if(status) {
+						mensaje.put("status", 200).put("response", "Fue cambiada la permisologia");
+				}else {
+						mensaje.put("status", 500).put("response", "No se pudo cambiar la permisologia");
+				}
 			}else {
-					mensaje.put("status", 500).put("response", "No se pudo cambiar la permisologia");
+				mensaje.put("status", 409).put("response", "No puede cambiar la permisologia porque es invitado");
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();

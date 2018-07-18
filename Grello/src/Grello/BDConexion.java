@@ -18,7 +18,7 @@ public class BDConexion {
 			this.con = null;		
 		    Class.forName ("org.postgresql.Driver");
 		    this.con = DriverManager.getConnection (   
-		    "jdbc:postgresql://localhost:1099/Grello", "postgres", "10021999");   
+		    "jdbc:postgresql://localhost:1099/Grello2", "postgres", "10021999");   
 		  } 
 		  catch (Exception e) {
 			e.printStackTrace ();
