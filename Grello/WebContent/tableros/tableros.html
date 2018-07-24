@@ -268,6 +268,31 @@
 					</div>
 				</div>
 			</div>
+			
+	<!-- ------------------------------------------------------Comentario--------------------------------------------------- -->
+	<div id="comentario" class="modal fade">
+				<div class="modal-dialog modal-sm">
+					<div class="modal-content">
+						<form>
+							<div class="modal-header">						
+								<h4 class="modal-title"><center>Comentario</center></h4>
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="window.location.reload(false)">&times;</button>
+							</div>
+							<div class="modal-body">					
+								<div class="form-group" id="comments">
+								
+									<label>Comentario</label>
+									<input type="text" class="form-control"  id="comment_text" required="required" placeholder="Enter comment">
+								</div>			
+							</div>
+							<div class="modal-footer">
+								<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" onclick="window.location.reload(false)">
+								<input type="button"  class="btn btn-success add-new" value="Comentar" id="boton" onclick="crearComentario(`${ID}`)" >
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
 	
 	
 	

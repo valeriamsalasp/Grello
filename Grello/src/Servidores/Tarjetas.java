@@ -35,8 +35,30 @@ public class Tarjetas extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		PrintWriter out = response.getWriter();
+		JSONObject mensaje = new JSONObject();
+		Queries db = new Queries();
+		ArrayList <JSONObject> arrayCard = new ArrayList<JSONObject>();
+		
+		System.out.println("Estoy en el metodo get de Comentarios");
+		Integer column_id = Integer.parseInt(request.getParameter("column_id"));
+		System.out.println("El card_id es "+ column_id);
+		
+		try {
+			System.out.println("Comenzamos con la lectura de las tarjetas");
+			arrayCard = db.LeerTarjetaColumna(column_id);
+			if(!arrayCard.isEmpty()) {
+				mensaje.put("status", 200).put("response",arrayCard);
+				System.out.println("Se ha realizado la lectura de la tarjeta");
+				System.out.println(arrayCard);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			db.closeResources();
+		}
+		out.println(mensaje.toString());
 	}
 
 	/**
@@ -48,87 +70,33 @@ public class Tarjetas extends HttpServlet {
 		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 		Queries db = new Queries();
 		JSONObject cardData = new JSONObject();
-		ArrayList <JSONObject> arrayCard = new ArrayList<JSONObject>();
 		
-		String a = data.getString("tipo").toString();
 		System.out.println("La date es: "+ data);
 		
-		if("crear".equals(a)) {
-			try {
-				System.out.println("comenzamos");
-				if(!db.BuscarTarjeta(data.getString("card_name"))) {
-					System.out.println("Nombre de la tarjeta correcta");
-					boolean status = db.CrearTarjeta(data);
-					cardData = db.LeerTarjeta(data);
-					if (status) {
-						System.out.println("La tarjeta fue creada");
-						if(cardData.length() > 0) {
-							mensaje.put("status", 200).put("response", cardData);
-							System.out.println("Todo realizado conexito");
-						}else {
-							mensaje.put("status", 500).put("response","No se pudo retornar la informaion de la tarjeta");
-						}
+		try {
+			System.out.println("comenzamos");
+			if(!db.BuscarTarjeta(data.getString("card_name"))) {
+				System.out.println("Nombre de la tarjeta correcta");
+				boolean status = db.CrearTarjeta(data);
+				cardData = db.LeerTarjeta(data);
+				if (status) {
+					System.out.println("La tarjeta fue creada");
+					if(cardData.length() > 0) {
+						mensaje.put("status", 200).put("response", cardData);
+						System.out.println("Todo realizado conexito");
 					}else {
-						mensaje.put("status", 500).put("response","La tarjeta no fue creada");
+						mensaje.put("status", 500).put("response","No se pudo retornar la informaion de la tarjeta");
 					}
 				}else {
-					mensaje.put("status", 400).put("response:","Este nombre de tarjeta ya existe");
+					mensaje.put("status", 500).put("response","La tarjeta no fue creada");
 				}
-			}catch(SQLException e) {
-				e.printStackTrace();
-			} finally {
-				db.closeResources();
+			}else {
+				mensaje.put("status", 400).put("response:","Este nombre de tarjeta ya existe");
 			}
-			
-		}else if("actualizar".equals(a)) {
-			System.out.println("Comenzamos con la actualizacion de la tarjeta");
-			try {
-				arrayCard = db.LeerPersonaAdmin(data);
-				if(arrayCard.size() == 1) {
-					boolean status = db.ActualizarTarjeta(data);
-					if (status) {
-							mensaje.put("status", 200).put("response", "La tarjeta fue actualizada");
-							System.out.println("La tarjeta fue actuializada");
-					}else {
-						mensaje.put("status", 500).put("response:","La tarjeta no fue actualizada");
-					}
-				}else {
-					cardData = db.LeerTarjetaEspecifica(data);
-					System.out.println("El id del creador es: " +cardData.getInt("user_id"));
-					System.out.println("El id del usuario actual es: "+ data.getInt("id"));
-					if((data.getInt("id")) == (cardData.getInt("user_id"))) {
-						boolean status = db.ActualizarTarjeta(data);
-						if (status) {
-								mensaje.put("status", 200).put("response", "La tarjeta fue actualizada");
-								System.out.println("La tarjeta fue actuializada");
-						}else {
-							mensaje.put("status", 500).put("response:","La tarjeta no fue actualizada");
-						}	
-					}else {
-						mensaje.put("status", 409).put("response:","La tarjeta no fue actualiada");
-					}
-					
-				}
-				
-			}catch(SQLException e) {
-				e.printStackTrace();
-			} finally {
-				db.closeResources();
-			}
-			
-		}else if("leer".equals(a)) {
-			try {
-				System.out.println("Comenzamos con la lectura de las tarjetas");
-				arrayCard = db.LeerTarjetaColumna(data);
-				if(!arrayCard.isEmpty()) {
-					mensaje.put("status", 200).put("response",arrayCard);
-					System.out.println("Se ha realizado la lectura de la tarjeta");
-					System.out.println(arrayCard);
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			db.closeResources();
 		}
 		
 		out.println(mensaje.toString());
@@ -178,6 +146,54 @@ public class Tarjetas extends HttpServlet {
 		}
 		out.println(mensaje.toString());
 	}
+	
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		PrintWriter out = response.getWriter();
+		JSONObject mensaje = new JSONObject();
+		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
+		Queries db = new Queries();
+		JSONObject cardData = new JSONObject();
+		ArrayList <JSONObject> arrayCard = new ArrayList<JSONObject>();
+		
+		System.out.println("La date es: "+ data);
+		
+		System.out.println("Comenzamos con la actualizacion de la tarjeta");
+		try {
+			arrayCard = db.LeerPersonaAdmin(data);
+			if(arrayCard.size() == 1) {
+				boolean status = db.ActualizarTarjeta(data);
+				if (status) {
+						mensaje.put("status", 200).put("response", "La tarjeta fue actualizada");
+						System.out.println("La tarjeta fue actuializada");
+				}else {
+					mensaje.put("status", 500).put("response:","La tarjeta no fue actualizada");
+				}
+			}else {
+				cardData = db.LeerTarjetaEspecifica(data);
+				System.out.println("El id del creador es: " +cardData.getInt("user_id"));
+				System.out.println("El id del usuario actual es: "+ data.getInt("id"));
+				if((data.getInt("id")) == (cardData.getInt("user_id"))) {
+					boolean status = db.ActualizarTarjeta(data);
+					if (status) {
+							mensaje.put("status", 200).put("response", "La tarjeta fue actualizada");
+							System.out.println("La tarjeta fue actuializada");
+					}else {
+						mensaje.put("status", 500).put("response:","La tarjeta no fue actualizada");
+					}	
+				}else {
+					mensaje.put("status", 409).put("response:","La tarjeta no fue actualiada");
+				}
+				
+			}
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			db.closeResources();
+		}
+	
+		out.print(mensaje.toString());
+		}
 
 
 }

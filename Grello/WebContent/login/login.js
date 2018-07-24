@@ -76,7 +76,6 @@ function crearColumna(){
 	userLogin = localStorage.getItem("id")
 	
 	var json ={
-            tipo: "crear",
             board_id: Id,
             column_name: document.getElementById("column_name").value,
             user_id: userLogin
@@ -98,13 +97,13 @@ function crearColumna(){
         	let columnData = data.columnData;
             if(data.status == 200){
             	console.log("Se agrego la columna ")
-                //location.href ="../tableros/tableros.html";
+            	window.location.reload(false);
                 localStorage.setItem('columnas', JSON.stringify(columnData));
                 localStorage.setItem('columnId', JSON.stringify(columnData.column_id));
                 
             }
         });
-	window.location.reload(false);
+	
 	
 }
 
@@ -113,7 +112,6 @@ function crearTarjeta(t){
 	userLogin = localStorage.getItem("id");
 	
 	var json ={
-            tipo: "crear",
             column_id: t,
             user_id: userLogin,
             card_name: document.getElementById("cardName").value,
@@ -143,6 +141,70 @@ function crearTarjeta(t){
 	
 	
 }
+function crearTarjeta(t){
+	
+	userLogin = localStorage.getItem("id");
+	
+	var json ={
+            column_id: t,
+            user_id: userLogin,
+            card_name: document.getElementById("cardName").value,
+            card_description: document.getElementById("cardDescription").value
+    }
+    
+    
+    let configs = {
+            method: 'post',
+            body: JSON.stringify(json),
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/json'
+            }
+    }
+    fetch('../Tarjetas', configs)
+        .then(res => res.json())
+        .then(data => {console.log(data)
+        	let cardData = data.userBoard;
+            if(data.status == 200){
+                localStorage.setItem('tarjetas', JSON.stringify(cardData));
+                localStorage.setItem('cardId', JSON.stringify(cardData.card_id))
+            }
+        });
+	window.location.reload(false);
+	
+	
+}
+
+function crearComentario(t){
+userLogin = localStorage.getItem("id");
+	
+	var json ={
+            card_id: t,
+            user_id: userLogin,
+            comment_text: document.getElementById("comment_text").value
+    }
+    
+    
+    let configs = {
+            method: 'post',
+            body: JSON.stringify(json),
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/json'
+            }
+    }
+    fetch('../Comentarios', configs)
+        .then(res => res.json())
+        .then(data => {console.log(data)
+        	let cardData = data.userBoard;
+            if(data.status == 200){
+            	window.location.reload(false);
+            }
+        });
+	
+}
 //------------------------------Transaladar direccion--------------------------------------------------
 const goToDetails = (id) => {
 	document.location.replace(`http://localhost:8080/Grello/tableros/tableros.html?id=${id}`)
@@ -168,22 +230,21 @@ const goToBuscador = (id) =>{
 //------------------------------------------------Leer---------------------------------------------------------------
 function leerTablero(){
 		userLogin = localStorage.getItem("id");
-		var json ={
+		/*var json ={
 	            tipo: "leer",
 	            user_id: userLogin
-	    }
+	    }*/
 	    
-		//var url = '../Tableros?user_id='+userLogin+'tipo='+1;
+		var url = '../Tableros?user_id='+userLogin;
 	    let configs = {
-	            method: 'post',
-	            body: JSON.stringify(json),
+	            method: 'get',
 	            withCredentials: true,
 	            credentials: 'include',
 	            headers: {
 	                'Content-type': 'application/json'
 	            }
 	    }
-	    fetch('../Tableros', configs)
+	    fetch(url, configs)
 	        .then(res => res.json())
 	        .then(data => {
 	        	console.log(data)
@@ -312,23 +373,18 @@ function leerTipoTablero(t){
 
 
 function leerColumna(id){
-	
-	var json ={
-            tipo: "leer",
-            board_id: id
-    }
     
-    
+	var url = '../Columna?board_id='+id;
     let configs = {
-            method: 'post',
-            body: JSON.stringify(json),
+            method: 'get',
+            //body: JSON.stringify(json),
             withCredentials: true,
             credentials: 'include',
             headers: {
                 'Content-type': 'application/json'
             }
     }
-    fetch('../Columna', configs)
+    fetch(url, configs)
         .then(res => res.json())
         .then(data => {
         	console.log(data)
@@ -342,22 +398,23 @@ function leerColumna(id){
 	    				<div class="column" ondrop="drop(event)" ondragover="allowDrop(event)">
 							<div class="column-header" ><input id="i-header" type="text" class="form-control" value="${arrayColumn[i].column_name}"/>
 							
-								<a class="delete-column" title="Borrar columna" data-toggle="tooltip" onclick="borrarColumna(${arrayColumn[i].column_id})"><img src="../img/delete.png" style="width:25px; hight:25px;"></a>
-								<button id="modificar" type="button" onclick="goToUpdate(${arrayColumn[i].column_id})" class="btn add-column"  data-toggle="modal" data-target="#update"></button>
+								<a class="delete-column" title="Borrar columna" data-toggle="tooltip" onclick="borrarColumna(${arrayColumn[i].column_id})">
+									<img src="../img/delete.png" style="width:25px; hight:25px;">
+								</a>
+								<button id="modificar" type="button" onclick="goToUpdate(${arrayColumn[i].column_id})" class="btn add-column"  data-toggle="modal" data-target="#update">
+									<img src="../img/update.png" style="width:25px; hight:25px;">
+								</button>
+								
 	    					</div>
 		    				
 		    				
-		    				<button type="button" id="cardButton${i}" onclick="goToUpdate(${arrayColumn[i].column_id})" class="btn add-card"  data-toggle="modal" data-target="#insertCard"></button>
+		    				<button type="button" id="cardButton${i}" onclick="goToUpdate(${arrayColumn[i].column_id})" class="btn add-card"  data-toggle="modal" data-target="#insertCard">
+		    					<img src="../img/agregar.png" style="width:25px; hight:25px;">
+		    				</button>
 	    				</div>
 		    			`
 	    				$(column).insertBefore($("#card-crear").parent());
 	    				
-	    				
-	    				
-	    			 //<div class="card-header text-center col-md-4">${arrayColumn[i].column_name}</div>	
-	                /*localStorage.setItem('columna', JSON.stringify(arrayColumn));
-	                localStorage.setItem('columndId', JSON.stringify(arrayColumn.column_id));
-	                localStorage.setItem('columnName', JSON.stringify(arrayColumn.column_name))*/
     			}	
     		}
         });	
@@ -367,22 +424,17 @@ function leerColumna(id){
 
 
 function leerTarjeta(t, x){
-	var json ={
-            tipo: "leer",
-            column_id: t
-    }
-    
-    
+	
+	var url = '../Tarjetas?column_id='+t;
     let configs = {
-            method: 'post',
-            body: JSON.stringify(json),
+            method: 'get',
             withCredentials: true,
             credentials: 'include',
             headers: {
                 'Content-type': 'application/json'
             }
     }
-    fetch('../Tarjetas', configs)
+    fetch(url, configs)
         .then(res => res.json())
         .then(data => {
         	console.log(data)
@@ -396,9 +448,18 @@ function leerTarjeta(t, x){
         				<div class="card-header"> <input type="text" id="c-header" class="form-control" value="${arrayCard[i].card_name}" placeholder="Titulo"/></div>
         					<div class="card-body">
         						<textarea id="card-a" class="form-control" type="text" name="card" placeholder="Escriba algo aqui" >${arrayCard[i].card_description}</textarea>
-        						<a class="delete-card" title="Delete Card" data-toggle="tooltip" onclick="borrarTarjeta(${arrayCard[i].card_id})"><img src="../img/delete.png" style="width:25px; hight:25px;"/></a>
-        						<a class="a-card" title="Add Card" data-toggle="tooltip" onclick=""><button type="button" onclick="goToUpdate(${arrayCard[i].card_id})" data-toggle="modal" data-target="#updateCard" class="btn btn-c"/></a>
-        						<a class="edit-card" title="Editar" data-toggle="tooltip" onclick="habilitarN(this);"></a>
+        						<a class="delete-card" title="Delete Card" data-toggle="tooltip" onclick="borrarTarjeta(${arrayCard[i].card_id})">
+        							<img src="../img/delete.png" style="width:25px; hight:25px;"/>
+    							</a>
+        						<button type="button" onclick="goToUpdate(${arrayCard[i].card_id})" data-toggle="modal" data-target="#updateCard" class="btn btn-c">
+        							<img src="../img/update.png" style="width:25px; hight:25px;">
+        						</button>
+        						<button id="archivo" type="button" onclick="" class="btn add-column">
+									<img src="../img/archivo.png" style="width:25px; hight:25px;">
+								</button>
+								<button id="co" type="button"  onclick="leerComentario(${arrayCard[i].card_id}), goToUpdate(${arrayCard[i].card_id})"class="btn add-column" data-toggle="modal" data-target="#comentario">
+									<img src="../img/comentario.png" style="width:25px; hight:25px;">
+								</button>
         					</div>
         				</div>
         			`
@@ -413,22 +474,16 @@ function leerTarjeta(t, x){
 
 function leerColumnaBuscador(id){
 	
-	var json ={
-            tipo: "leer",
-            board_id: id
-    }
-    
-    
+	var url = '../Columna?board_id='+id;
     let configs = {
-            method: 'post',
-            body: JSON.stringify(json),
+            method: 'get',
             withCredentials: true,
             credentials: 'include',
             headers: {
                 'Content-type': 'application/json'
             }
     }
-    fetch('../Columna', configs)
+    fetch(url, configs)
         .then(res => res.json())
         .then(data => {
         	console.log(data)
@@ -441,9 +496,8 @@ function leerColumnaBuscador(id){
 	    			var column=`
 	    				<div class="column" ondrop="drop(event)" ondragover="allowDrop(event)">
 							<div class="column-header" ><input id="header${i}" type="text" class="form-control" value="${arrayColumn[i].column_name}"/>
-								</div>
-		    				</div>
-		    			`
+							</div>
+	    				</div>`
 	    				$(column).insertBefore($("#card-crear").parent());
     			}	
     		}
@@ -452,22 +506,17 @@ function leerColumnaBuscador(id){
 }
 
 function leerTarjetaBuscador(t, x){
-	var json ={
-            tipo: "leer",
-            column_id: t
-    }
-    
-    
+	
+	var url = '../Tarjetas?column_id='+t;
     let configs = {
-            method: 'post',
-            body: JSON.stringify(json),
+            method: 'get',
             withCredentials: true,
             credentials: 'include',
             headers: {
                 'Content-type': 'application/json'
             }
     }
-    fetch('../Tarjetas', configs)
+    fetch(url, configs)
         .then(res => res.json())
         .then(data => {
         	console.log(data)
@@ -495,21 +544,17 @@ function leerTarjetaBuscador(t, x){
 }
 
 function leerInvitado(t){
-	var json ={
-			tipo:"leer",
-            board_id: t
-    }
-  
+	
+	var url = '../Invitados?board_id='+t;
     let configs = {
-            method: 'post',
-            body: JSON.stringify(json),
+            method: 'get',
             withCredentials: true,
             credentials: 'include',
             headers: {
                 'Content-type': 'application/json'
             }
     }
-    fetch('../InvitadosBuscador', configs)
+    fetch(url, configs)
         .then(res => res.json())
         .then(data => {console.log(data)
         	let arrayBuscar = data.response;
@@ -529,6 +574,43 @@ function leerInvitado(t){
 	
 }
 
+function leerComentario(t){
+	
+	var url = '../Comentarios?card_id='+t;
+    let configs = {
+            method: 'get',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/json'
+            }
+    }
+    fetch(url, configs)
+        .then(res => res.json())
+        .then(data => {console.log(data)
+        	let arrayComment = data.response;
+        
+			if(data.status == 200){
+				for (var i = 0; i < arrayComment.length; i++){
+            		console.log("Nombre del invitado "+i+": "+arrayComment[i].user_username );
+	            	var comment = `	
+	            	<a class="delete-card" title="Delete Card" data-toggle="tooltip" onclick="borrarComentario(${arrayComment[i].comment_id})">
+						<img src="../img/delete.png" style="width:25px; hight:25px;"/>
+	            		</a>
+	            	<div class="card" draggable="true" ondragstart="drag(event)">
+	            		
+        				<div class="card-header">${arrayComment[i].user_username}</div>
+    					<div class="card-body">
+	            		${arrayComment[i].comment_text}
+    					</div>
+        			</div>`
+	            		document.getElementById("comments").innerHTML += comment; 
+            	}
+            }
+        });
+	
+}
+
 
 //----------------------------------------------------actualizar-----------------------------------------------
 function actualizarTablero(t){
@@ -542,7 +624,7 @@ function actualizarTablero(t){
     
     
     let configs = {
-            method: 'post',
+            method: 'put',
             body: JSON.stringify(json),
             withCredentials: true,
             credentials: 'include',
@@ -606,7 +688,7 @@ function actualizarColumna(t){
     
     
     let configs = {
-            method: 'post',
+            method: 'put',
             body: JSON.stringify(json),
             withCredentials: true,
             credentials: 'include',
@@ -641,7 +723,6 @@ function actualizarTarjeta(t){
     
     
     let configs = {
-            method: 'post',
             body: JSON.stringify(json),
             withCredentials: true,
             credentials: 'include',
@@ -674,7 +755,7 @@ function actualizarInvitado(t){
     
     
     let configs = {
-            method: 'post',
+            method: 'put',
             body: JSON.stringify(json),
             withCredentials: true,
             credentials: 'include',
@@ -682,7 +763,7 @@ function actualizarInvitado(t){
                 'Content-type': 'application/json'
             }
     }
-    fetch('../InvitadosBuscador', configs)
+    fetch('../Invitados', configs)
         .then(res => res.json())
         .then(data => {console.log(data)
         	
@@ -807,7 +888,6 @@ function borrarTarjeta(t){
 function borrarInvitado(t){
 	userLogin = localStorage.getItem("id");
 	var json ={
-            tipo: "borrar",
             user_id: t,
             id: userLogin
     }
@@ -822,17 +902,49 @@ function borrarInvitado(t){
                 'Content-type': 'application/json'
             }
     }
-    fetch('../InvitadosBuscador', configs)
+    fetch('../Invitados', configs)
         .then(res => res.json())
         .then(data => {console.log(data)
         	let arrayColumn = data.arrayColumn;
         	
     		if(data.status == 200){
     			console.log(data);
+    			window.location.reload(false);
             }	
             
         });	
-	window.location.reload(false);
+	
+}
+
+function borrarComentario(t){
+	userLogin = localStorage.getItem("id");
+	var json ={
+            id: userLogin,
+            comment_id: t
+    }
+    
+    
+    let configs = {
+            method: 'delete',
+            body: JSON.stringify(json),
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/json'
+            }
+    }
+    fetch('../Comentarios', configs)
+        .then(res => res.json())
+        .then(data => {console.log(data)
+        	let arrayColumn = data.arrayColumn;
+        	
+    		if(data.status == 200){
+    			console.log(data);
+    			window.location.reload(false);
+            }	
+            
+        });	
+	
 }
 
 //---------------------------------------------Buscador---------------------------------------------------------------
@@ -847,7 +959,7 @@ function buscar(){
             }
     }
 	
-	var url = '../InvitadosBuscador?user_username='+document.getElementById("buscador").value
+	var url = '../Buscador?board_name='+document.getElementById("buscador").value
 
     fetch(url, configs)
     	.then( r => r.json() )
@@ -884,7 +996,6 @@ function buscar(){
 function agregarInvitado(t){
 	userLogin = localStorage.getItem("id");
 	var json ={
-			tipo:"agregar",
             board_id: t,
             user_username: document.getElementById("username").value,
             id: userLogin
@@ -899,7 +1010,7 @@ function agregarInvitado(t){
                 'Content-type': 'application/json'
             }
     }
-    fetch('../InvitadosBuscador', configs)
+    fetch('../Invitados', configs)
         .then(res => res.json())
         .then(data => {console.log(data)
         	let userData = data.userData;
@@ -911,6 +1022,8 @@ function agregarInvitado(t){
             }
         });
 }
+
+//--------------------------------------------Comentarios-------------------------------------------
 
 
 

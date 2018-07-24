@@ -37,47 +37,29 @@ public class Tableros extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
 		JSONObject mensaje = new JSONObject();
-		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 		Queries db = new Queries();
-		JSONObject userBoard = new JSONObject();
 		ArrayList<JSONObject> dataBoard = new ArrayList<JSONObject>();
 		
 		//String id = (request.getParameter("id"));
+		Integer user_id = Integer.parseInt(request.getParameter("user_id"));
+
 		
-		int a = data.getInt("tipo");
-		System.out.println(data);
-		System.out.println("a: "+a);
-		
-		 if(a == 1) {
-				try {
-					System.out.println("Comenzamos con la lectura");
-					dataBoard = db.LeerTablero(data);
-					if(!dataBoard.isEmpty()) {
-						mensaje.put("status", 200).put("response", dataBoard);
-						System.out.println("Se ha realizado la lectura del tablero");
-						System.out.println(dataBoard);
-					}
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-			}else if("leerTipo".equals(a)) {
-				try {
-				userBoard = db.LeerTipoTablero(data);
-					if(userBoard.length() > 0) {
-						mensaje.put("status", 200).put("response", userBoard);
-						System.out.println("Se realizo la lectura del tipo de tablero");
-					}else {
-						mensaje.put("status", 200).put("response", "No se pudo realizar la lectura del tipo de tablero");
-					}
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		try {
+			System.out.println("Comenzamos con la lectura");
+			dataBoard = db.LeerTablero(user_id);
+			if(!dataBoard.isEmpty()) {
+				mensaje.put("status", 200).put("response", dataBoard);
+				System.out.println("Se ha realizado la lectura del tablero");
+				System.out.println(dataBoard);
 			}
-			
-			out.println(mensaje.toString());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			db.closeResources();
+		}
+		
+		out.println(mensaje.toString());
 
 		
 	}
@@ -91,8 +73,6 @@ public class Tableros extends HttpServlet {
 		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 		Queries db = new Queries();
 		JSONObject userBoard = new JSONObject();
-		ArrayList<JSONObject> dataBoard = new ArrayList<JSONObject>();
-		ArrayList<JSONObject> admin = new ArrayList<JSONObject>();
 	
 		
 		String a = data.getString("tipo").toString();
@@ -133,38 +113,6 @@ public class Tableros extends HttpServlet {
 				db.closeResources();
 			}
 			
-		}else if("actualizar".equals(a)) {
-			System.out.println("Entramos en actualizar Tablero");
-			try {
-				boolean status = db.ActualizarTablero(data);
-				if (status) {
-						mensaje.put("status", 200).put("response", "El tablero fue actualizado");
-				}else {
-					mensaje.put("status", 500).put("response","El tablero no fue actualizado");
-				}
-			}catch(SQLException e) {
-				e.printStackTrace();
-			} finally {
-				db.closeResources();
-			}
-			
-		}else if("borrar".equals(a)) {
-			
-			
-		}else if("leer".equals(a)) {
-			try {
-				System.out.println("Comenzamos con la lectura");
-				dataBoard = db.LeerTablero(data);
-				if(!dataBoard.isEmpty()) {
-					mensaje.put("status", 200).put("response", dataBoard);
-					System.out.println("Se ha realizado la lectura del tablero");
-					System.out.println(dataBoard);
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
 		}else if("leerTipo".equals(a)) {
 			try {
 			userBoard = db.LeerTipoTablero(data);
@@ -177,6 +125,8 @@ public class Tableros extends HttpServlet {
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} finally {
+				db.closeResources();
 			}
 		}
 		
@@ -189,9 +139,7 @@ public class Tableros extends HttpServlet {
 		JSONObject mensaje = new JSONObject();
 		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 		Queries db = new Queries();
-		JSONObject userBoard = new JSONObject();
 		ArrayList<JSONObject> dataBoard = new ArrayList<JSONObject>();
-		ArrayList<JSONObject> admin = new ArrayList<JSONObject>();
 		
 			
 		System.out.println("Entramos en borrar Tablero");
@@ -266,5 +214,30 @@ public class Tableros extends HttpServlet {
 		}
 		out.println(mensaje.toString());
 	}
+	
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		PrintWriter out = response.getWriter();
+		JSONObject mensaje = new JSONObject();
+		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
+		Queries db = new Queries();
+		/*JSONObject userBoard = new JSONObject();
+		ArrayList<JSONObject> dataBoard = new ArrayList<JSONObject>();
+		ArrayList<JSONObject> admin = new ArrayList<JSONObject>();*/
+		
+		try {
+			boolean status = db.ActualizarTablero(data);
+			if (status) {
+					mensaje.put("status", 200).put("response", "El tablero fue actualizado");
+			}else {
+				mensaje.put("status", 500).put("response","El tablero no fue actualizado");
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			db.closeResources();
+		}
+		
+		out.print(mensaje.toString());
+		}
 
 }

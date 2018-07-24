@@ -35,8 +35,30 @@ public class Columna extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		PrintWriter out = response.getWriter();
+		JSONObject mensaje = new JSONObject();
+		Queries db = new Queries();
+		ArrayList <JSONObject> arrayColumn = new ArrayList<JSONObject>();
+		
+		System.out.println("Estoy en el metodo get de Comentarios");
+		Integer board_id = Integer.parseInt(request.getParameter("board_id"));
+		System.out.println("El board_id es "+ board_id);
+		
+		try {
+			System.out.println("Comenzamos con la lectura de las columnas");
+			arrayColumn = db.LeerColumnaTablero(board_id);
+			if(!arrayColumn.isEmpty()) {
+				mensaje.put("status", 200).put("response",arrayColumn);
+				System.out.println("Se ha realizado la lectura de las columnas");
+				System.out.println(arrayColumn);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			db.closeResources();
+		}
+		out.println(mensaje.toString());
 	}
 
 	/**
@@ -47,90 +69,38 @@ public class Columna extends HttpServlet {
 		JSONObject mensaje = new JSONObject();
 		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 		Queries db = new Queries();
-		ArrayList <JSONObject> arrayColumn = new ArrayList<JSONObject>();
+		
 		
 		JSONObject columnData = new JSONObject();
 		
-		String a = data.getString("tipo").toString();
 		System.out.println("la data es: "+data);
 		
-		if("crear".equals(a)) {
-			try {
-				System.out.println("comenzamos");
-				if(!db.BuscarColumna(data)){
-					System.out.println("Nombre de la columna correcta");
-					boolean status = db.CrearColumna(data);
-					if (status) {
-						System.out.println("La columna fue creada");
-						columnData = db.InformacionColumna(data);
-						if(columnData.length() > 0) {
-							mensaje.put("status", 200).put("response",columnData);
-							System.out.println("Todo realizado con exito");
-						}else {
-							mensaje.put("status", 200).put("response","No se pudo traer los datos de la columna");
-						}
+		try {
+			System.out.println("comenzamos");
+			if(!db.BuscarColumna(data)){
+				System.out.println("Nombre de la columna correcta");
+				boolean status = db.CrearColumna(data);
+				if (status) {
+					System.out.println("La columna fue creada");
+					columnData = db.InformacionColumna(data);
+					if(columnData.length() > 0) {
+						mensaje.put("status", 200).put("response",columnData);
+						System.out.println("Todo realizado con exito");
 					}else {
-						mensaje.put("status", 500).put("response","La columna no fue creado");
+						mensaje.put("status", 200).put("response","No se pudo traer los datos de la columna");
 					}
 				}else {
-					mensaje.put("status", 400).put("response:","Este nombre de columna ya existe");
+					mensaje.put("status", 500).put("response","La columna no fue creado");
 				}
-			}catch(SQLException e) {
-				e.printStackTrace();
-			} finally {
-				db.closeResources();
+			}else {
+				mensaje.put("status", 400).put("response:","Este nombre de columna ya existe");
 			}
-			
-		}else if("actualizar".equals(a)) {
-			try {
-				System.out.println("Empezamos Actualizar columna");
-				arrayColumn = db.LeerPersonaAdmin(data);
-				if(arrayColumn.size() == 1) {
-					System.out.println("Admin");
-					boolean status = db.ActualizarColumna(data);
-					if (status) {
-							mensaje.put("status", 200).put("response", "El tablero fue actualizado");
-					}else {
-						mensaje.put("status", 500).put("response","El tablero no fue actualizado");
-					}
-				}else {
-					System.out.println("Invitado");
-					columnData = db.LeerColumnaEspecifica(data);
-					System.out.println("El id del creador es: " +columnData.getInt("user_id"));
-					System.out.println("El id del usuario actual es: "+ data.getInt("id"));
-					if((data.getInt("id")) == (columnData.getInt("user_id"))) {
-						boolean status = db.ActualizarColumna(data);
-						if (status) {
-								mensaje.put("status", 200).put("response", "El tablero fue actualizado");
-						}else {
-							mensaje.put("status", 500).put("response","El tablero no fue actualizado");
-						}	
-					}else {
-						mensaje.put("status", 409).put("response","No es el creador de la columna a modificar");
-						System.out.println("No es el creador de la columna a modificar");
-					}
-				}
-				
-			}catch(SQLException e) {
-				e.printStackTrace();
-			} finally {
-				db.closeResources();
-			}
-				
-		}else if("leer".equals(a)) {
-			try {
-				System.out.println("Comenzamos con la lectura de las columnas");
-				arrayColumn = db.LeerColumnaTablero(data);
-				if(!arrayColumn.isEmpty()) {
-					mensaje.put("status", 200).put("response",arrayColumn);
-					System.out.println("Se ha realizado la lectura de las columnas");
-					System.out.println(arrayColumn);
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			db.closeResources();
 		}
+		
 		out.println(mensaje.toString());
 		
 	}
@@ -180,5 +150,54 @@ public class Columna extends HttpServlet {
 		}
 		out.println(mensaje.toString());
 	}
+	
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		PrintWriter out = response.getWriter();
+		JSONObject mensaje = new JSONObject();
+		JSONObject data = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
+		Queries db = new Queries();
+		ArrayList <JSONObject> arrayColumn = new ArrayList<JSONObject>();
+		
+		JSONObject columnData = new JSONObject();
+		
+		System.out.println("la data es: "+data);
+		
+		try {
+			System.out.println("Empezamos Actualizar columna");
+			arrayColumn = db.LeerPersonaAdmin(data);
+			if(arrayColumn.size() == 1) {
+				System.out.println("Admin");
+				boolean status = db.ActualizarColumna(data);
+				if (status) {
+						mensaje.put("status", 200).put("response", "El tablero fue actualizado");
+				}else {
+					mensaje.put("status", 500).put("response","El tablero no fue actualizado");
+				}
+			}else {
+				System.out.println("Invitado");
+				columnData = db.LeerColumnaEspecifica(data);
+				System.out.println("El id del creador es: " +columnData.getInt("user_id"));
+				System.out.println("El id del usuario actual es: "+ data.getInt("id"));
+				if((data.getInt("id")) == (columnData.getInt("user_id"))) {
+					boolean status = db.ActualizarColumna(data);
+					if (status) {
+							mensaje.put("status", 200).put("response", "La columna fue actualizada");
+					}else {
+						mensaje.put("status", 500).put("response","la columna no fue actualizada");
+					}	
+				}else {
+					mensaje.put("status", 409).put("response","No es el creador de la columna a modificar");
+					System.out.println("No es el creador de la columna a modificar");
+				}
+			}
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			db.closeResources();
+		}
+		out.print(mensaje.toString());
+		}
+
 
 }
