@@ -454,7 +454,7 @@ function leerTarjeta(t, x){
         						<button type="button" onclick="goToUpdate(${arrayCard[i].card_id})" data-toggle="modal" data-target="#updateCard" class="btn btn-c">
         							<img src="../img/update.png" style="width:25px; hight:25px;">
         						</button>
-        						<button id="archivo" type="button" onclick="" class="btn add-column">
+        						<button id="archivo" type="button"  onclick="" class="btn add-column" data-toggle="modal" data-target="#archivos">
 									<img src="../img/archivo.png" style="width:25px; hight:25px;">
 								</button>
 								<button id="co" type="button"  onclick="leerComentario(${arrayCard[i].card_id}), goToUpdate(${arrayCard[i].card_id})"class="btn add-column" data-toggle="modal" data-target="#comentario">
