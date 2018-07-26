@@ -294,7 +294,7 @@
 				</div>
 			</div>
 			
-	<!-- -----------------------------------------------Subier archivos------------------------------------------------------------- -->
+	<!-- -----------------------------------------------Subir archivos------------------------------------------------------------- -->
 	<div id="archivos" class="modal fade">
 				<div class="modal-dialog modal-sm">
 					<div class="modal-content">
@@ -304,17 +304,15 @@
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="window.location.reload(false)">&times;</button>
 							</div>
 							<div class="modal-body">					
-								<div class="form-group" id="comments">
+								<div class="form-group" id="PonerFiles">
 								
 									<label>Archivo</label>
-									<br>
-									<input type="text" id"nombreArchivo" placeholder="Enter name" />
-									<input type="file" id="files" />
+									<input type="file" id="file"  enctype='multipart/form-data' />
 								</div>			
 							</div>
 							<div class="modal-footer">
 								<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" onclick="window.location.reload(false)">
-								<input type="button"  class="btn btn-success add-new" value="Subir" id="boton" onclick="" >
+								<input type="button"  class="btn btn-success add-new" value="Subir" id="boton" onclick="crearArchivo(`${ID}`)" >
 							</div>
 						</form>
 					</div>

@@ -321,4 +321,31 @@ public class Queries extends BDConexion {
 	}
 	
 	
+	//---------------------------------------------------Archivos---------------------------------------------------------------------
+	public boolean AgregarArchivo(int card_id, int user_id, String file_url, String file_name) throws SQLException{
+		int i = executeUpdate("AgregarArchivo", card_id, user_id, file_url, file_name);
+		return (i == 1)?true:false;
+	}
+	public ArrayList<JSONObject> LeerArchivo(int card_id)throws SQLException{
+		this.rs = executeStatement("LeerArchivo", card_id);
+		return this.getArray();
+	}
+	public JSONObject LeerArchivoEspecifico (JSONObject data)throws SQLException{
+		this.rs = executeStatement("LeerArchivoEspecifico", data.getInt("file_id"));
+		return this.getData();
+	}
+	public JSONObject ObtenerNombreArchivo (Integer id)throws SQLException{
+		this.rs = executeStatement("ObtenerNombreArchivo", id);
+		return this.getData();
+	}
+	public boolean BorrarArchivo(JSONObject data) throws SQLException{
+		int i = executeUpdate("BorrarArchivo", data.getInt("file_id"));
+		return (i == 1)?true:false;
+	}
+	public boolean VerificarArchivo(int card_id, String file_name) throws SQLException{
+		int i = executeUpdate("VerificarArchivo",card_id, file_name);
+		return (i == 1)?true:false;
+	}
+	
+	
 }

@@ -205,6 +205,7 @@ userLogin = localStorage.getItem("id");
         });
 	
 }
+
 //------------------------------Transaladar direccion--------------------------------------------------
 const goToDetails = (id) => {
 	document.location.replace(`http://localhost:8080/Grello/tableros/tableros.html?id=${id}`)
@@ -212,6 +213,7 @@ const goToDetails = (id) => {
 
 const goToUpdate = (id) => {
 	ID = id;
+	console.log("Estamos en goToUpdate")
 	console.log("Este es: "+ ID);
 	console.log(document.location);
 }
@@ -227,6 +229,7 @@ const goToUpdateInvited = (id, tipo) => {
 const goToBuscador = (id) =>{
 	document.location.replace(`http://localhost:8080/Grello/buscador/index.html?id=${id}`)
 }
+
 //------------------------------------------------Leer---------------------------------------------------------------
 function leerTablero(){
 		userLogin = localStorage.getItem("id");
@@ -252,7 +255,7 @@ function leerTablero(){
 	        	
         		if(data.status == 200){
         			for (var i = 0; i < boardData.length; i++){
-	        			console.log("board id "+i+": "+boardData[i].board_id);	        			
+	        			console.log("board id "+i+": "+boardData[i].board_id);	 
 	        			let container = `
 		        			<div class="col-md-4" style="padding-bottom:10px">
 		        				<button id="modificar" type="button" onclick="goToUpdate(${boardData[i].board_id})" class="btn btn-info add-new" style="background-color: #1b9891;" data-toggle="modal" data-target="#update"><img src="../img/plus.png" style="width:30px; height:30px;" >
@@ -454,7 +457,7 @@ function leerTarjeta(t, x){
         						<button type="button" onclick="goToUpdate(${arrayCard[i].card_id})" data-toggle="modal" data-target="#updateCard" class="btn btn-c">
         							<img src="../img/update.png" style="width:25px; hight:25px;">
         						</button>
-        						<button id="archivo" type="button"  onclick="" class="btn add-column" data-toggle="modal" data-target="#archivos">
+        						<button id="archivo" type="button"  onclick="leerArchivo(${arrayCard[i].card_id}), goToUpdate(${arrayCard[i].card_id})" class="btn add-column" data-toggle="modal" data-target="#archivos">
 									<img src="../img/archivo.png" style="width:25px; hight:25px;">
 								</button>
 								<button id="co" type="button"  onclick="leerComentario(${arrayCard[i].card_id}), goToUpdate(${arrayCard[i].card_id})"class="btn add-column" data-toggle="modal" data-target="#comentario">
@@ -611,7 +614,47 @@ function leerComentario(t){
 	
 }
 
+function leerArchivo(t){
+	
+	var url = '../SubirArchivo?card_id='+t;
+    let configs = {
+            method: 'get',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/json'
+            }
+    }
+    fetch(url, configs)
+        .then(res => res.json())
+        .then(data => {console.log(data)
+        	let arrayFile = data.response;
+        
+			if(data.status == 200){
+				for (var i = 0; i < arrayFile.length; i++){
+            		console.log("Nombre del archivo "+i+": "+arrayFile[i].file_name );
+	            	var comment = `	
+	            	<a class="delete-card" title="Delete Card" data-toggle="tooltip" onclick="borrarArchivo(${arrayFile[i].file_id})">
+						<img src="../img/delete.png" style="width:25px; hight:25px;"/>
+	            	</a>
+//	            	<div class="card" draggable="true" ondragstart="drag(event)" onclick="bajar(${arrayFile[i].file_id})">
+    					<div class="card-body" >
+	            		${arrayFile[i].file_name}
+    					</div>
+    					
+        			</div>`
+	            		document.getElementById("PonerFiles").innerHTML += comment; 
+            	}
+            }
+        });
+	
+}
 
+function bajar (t) {
+	var url = "../BajarArchivo?id="+ t;
+	
+	var downloadWindow = window.open(url);
+}
 //----------------------------------------------------actualizar-----------------------------------------------
 function actualizarTablero(t){
 	userLogin = localStorage.getItem("id");
@@ -947,6 +990,38 @@ function borrarComentario(t){
 	
 }
 
+function borrarArchivo(t){
+	userLogin = localStorage.getItem("id");
+	var json ={
+			board_id: Id,
+            id: userLogin,
+            file_id: t
+    }
+    
+    
+    let configs = {
+            method: 'delete',
+            body: JSON.stringify(json),
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/json'
+            }
+    }
+    fetch('../SubirArchivo', configs)
+        .then(res => res.json())
+        .then(data => {console.log(data)
+        	let arrayFile = data.arrayFile;
+        	
+    		if(data.status == 200){
+    			console.log(data);
+    			window.location.reload(false);
+            }	
+            
+        });	
+	
+}
+
 //---------------------------------------------Buscador---------------------------------------------------------------
 function buscar(){
     let configs = {
@@ -1023,7 +1098,93 @@ function agregarInvitado(t){
         });
 }
 
-//--------------------------------------------Comentarios-------------------------------------------
+function crearArchivo(t){
+	userLogin = localStorage.getItem("id");
+	var formData = new FormData();
+	formData.append("file", document.getElementById("file").files[0]);
+	myFile = document.getElementById("file").files[0].name;
+	formData.append("user_id", userLogin);
+	formData.append("card_id", t);
+	formData.append("file_name", myFile);
+	/*var files = document.getElementById("file").files;
+	console.log(files.length);
+	for (var i = 0; i < files.length; i++) {
+		  console.log('file'+i);
+		  var file = files[i];
+		  formData.append('files[]', file, file.name);
+		}
+	formData.append('user_id', userLogin);
+	formData.append('card_id', t);*/
+	let configs = {
+            method: 'post',
+            //body: JSON.stringify(json),
+            body: formData,
+            withCredentials: true,
+            credentials: 'include'
+    }
+    fetch('../FileUp', configs)
+        .then(res => res.json())
+        .then(data => {console.log(data)
+        	let userData = data.userData;
+            if(data.status == 200){
+            	console.log("Todo bien");
+            	window.location.reload(false);
+            }else if(data.status == 409){
+            	alert("El archivo ya existe en la tarjeta");
+            }
+        });
+	
+	
+}
+
+
+	/*var xhr = new XMLHttpRequest();
+	var myFile = "";
+	function upload(t){
+		userLogin = localStorage.getItem("id");
+		var formData = new FormData();
+		formData.append("file", document.getElementById("file").files[0]);
+		//myFile = $("file").files.name;
+		formData.append("user_id", userLogin);
+		formData.append("card_id", t);
+		
+		xhr.onreadystatechange = function () {
+			if (xhr.status === 200 && xhr.readyState === 4) {
+				$("uploadStatus").textContent = xhr.responseText + "\nFile uploaded";
+			}
+		}
+		
+		xhr.open("post", "../FileUp", true);	
+		xhr.send(formData);
+		
+	}
+	
+	function mulUpload(t){
+		userLogin = localStorage.getItem("id");
+		var formData = new FormData();
+		var files = document.getElementById("file").files;
+		console.log(files.length);
+		formData.append("user_id", userLogin);
+		formData.append("card_id", t);
+		for (var i = 0; i < files.length; i++) {
+			  console.log('pao');
+			  var file = files[i];
+			  formData.append('photos[]', file, file.name);
+			  
+			}	
+		xhr.onreadystatechange = function () {
+			if (xhr.status === 200 && xhr.readyState === 4) {
+				$("uploadStatus").textContent = xhr.responseText + "\nFiles uploaded";
+			}
+		}
+		xhr.open("post", "../MultFilesUp", true);	
+		xhr.send(formData);
+	}*/
+
+
+
+	
+
 
 
 
