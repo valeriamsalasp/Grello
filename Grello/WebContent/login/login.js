@@ -637,7 +637,7 @@ function leerArchivo(t){
 	            	<a class="delete-card" title="Delete Card" data-toggle="tooltip" onclick="borrarArchivo(${arrayFile[i].file_id})">
 						<img src="../img/delete.png" style="width:25px; hight:25px;"/>
 	            	</a>
-//	            	<div class="card" draggable="true" ondragstart="drag(event)" onclick="bajar(${arrayFile[i].file_id})">
+            		<div class="card" draggable="true" ondragstart="drag(event)" onclick="bajar(${arrayFile[i].file_id})">
     					<div class="card-body" >
 	            		${arrayFile[i].file_name}
     					</div>
